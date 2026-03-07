@@ -1,0 +1,203 @@
+'use client';
+
+import { useCartStore } from '@/store/useCartStore';
+import { Trash2, Plus, Minus, ArrowLeft, Truck, Store, CheckCircle } from 'lucide-react';
+import Link from 'next/link';
+import Image from 'next/image';
+import { useState } from 'react';
+import { createOrder } from './actions';
+
+export default function CheckoutPage() {
+    const { items, addItem, decreaseItem, removeItem, total, finishOrder } = useCartStore();
+    const [deliveryType, setDeliveryType] = useState<'RETIRADA' | 'ENTREGA'>('RETIRADA');
+    const [customerName, setCustomerName] = useState('');
+    const [customerPhone, setCustomerPhone] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isSuccess, setIsSuccess] = useState(false);
+
+    const subtotal = total();
+    const freight = deliveryType === 'ENTREGA' ? 15.0 : 0.0;
+    const finalTotal = subtotal + freight;
+
+    const handlePayment = async () => {
+        if (!customerName || !customerPhone) {
+            alert('Por favor, preencha nome e telefone para identificação.');
+            return;
+        }
+
+        setIsSubmitting(true);
+        const result = await createOrder({
+            customerName,
+            customerPhone,
+            deliveryType,
+            totalAmount: finalTotal,
+            items: items.map(i => ({
+                batchId: i.id,
+                quantity: i.quantity,
+                pricePaid: i.price
+            }))
+        });
+
+        if (result.success) {
+            finishOrder();
+            setIsSuccess(true);
+        } else {
+            alert('Erro ao processar pedido. Tente novamente.');
+            setIsSubmitting(false);
+        }
+    };
+
+    if (isSuccess) {
+        return (
+            <div className="min-h-screen bg-[#F5F2EC] flex flex-col items-center justify-center p-6 text-center">
+                <div className="bg-white p-12 shadow-sm border border-[#E8E0D5] flex flex-col items-center">
+                    <div className="bg-green-100 p-4 rounded-full mb-6">
+                        <CheckCircle className="w-12 h-12 text-green-600" />
+                    </div>
+                    <h2 className="font-serif text-3xl font-medium text-[#1E1A17] mb-4">Pedido Recebido!</h2>
+                    <p className="text-[#5C5552] mb-8 font-medium">Obrigado pela preferência, {customerName.split(' ')[0]}. <br /> Já enviamos os detalhes no seu WhatsApp.</p>
+                    <Link href="/" className="bg-[#D6C1AE] text-[#1E1A17] px-8 py-4 font-bold hover:bg-[#c9af96] transition-all uppercase tracking-widest text-xs">
+                        Voltar para a Padaria
+                    </Link>
+                </div>
+            </div>
+        );
+    }
+
+    if (items.length === 0) {
+        return (
+            <div className="min-h-screen bg-[#F5F2EC] flex flex-col items-center justify-center p-6 text-center">
+                <div className="bg-white p-12 shadow-sm border border-[#E8E0D5]">
+                    <h2 className="font-serif text-3xl font-medium text-[#1E1A17] mb-4">Seu cesto está vazio</h2>
+                    <p className="text-[#5C5552] mb-8">Que tal escolher um pão quentinho para começar?</p>
+                    <Link href="/" className="bg-[#D6C1AE] text-[#1E1A17] px-8 py-4 font-bold hover:bg-[#c9af96] transition-all uppercase tracking-widest text-xs">
+                        Voltar para a Padaria
+                    </Link>
+                </div>
+            </div>
+        );
+    }
+
+    const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        let value = e.target.value.replace(/\D/g, ''); // Remove non-digits
+
+        if (value.length > 11) value = value.slice(0, 11); // Limit to 11 digits
+
+        // Apply mask: (XX) XXXXX-XXXX
+        if (value.length > 10) {
+            value = value.replace(/^(\d{2})(\d{5})(\d{4}).*/, '($1) $2-$3');
+        } else if (value.length > 6) {
+            value = value.replace(/^(\d{2})(\d{4,5})(\d{0,4}).*/, '($1) $2-$3');
+        } else if (value.length > 2) {
+            value = value.replace(/^(\d{2})(\d{0,5})/, '($1) $2');
+        } else if (value.length > 0) {
+            value = value.replace(/^(\d*)/, '($1');
+        }
+
+        setCustomerPhone(value);
+    };
+
+    return (
+        <div className="min-h-screen bg-[#F5F2EC] py-16 md:py-24 px-6 md:px-12">
+            <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-12">
+
+                <div className="lg:col-span-2 space-y-8">
+                    <Link href="/#top" className="flex items-center gap-2 text-[#A89078] font-bold uppercase text-[10px] tracking-widest hover:text-[#1E1A17] transition-colors mb-4">
+                        <ArrowLeft className="w-4 h-4" /> Voltar
+                    </Link>
+
+                    <h1 className="font-serif text-[40px] md:text-[56px] font-medium text-[#1E1A17] mb-8 leading-tight">Finalizar Pedido</h1>
+
+                    {/* Identificação */}
+                    <div className="bg-white p-8 shadow-sm border border-[#E8E0D5]">
+                        <h2 className="font-serif text-2xl font-medium text-[#1E1A17] mb-6">Identificação</h2>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="flex flex-col gap-2">
+                                <label className="text-[10px] font-bold text-[#A89078] uppercase tracking-widest">Seu Nome</label>
+                                <input
+                                    type="text"
+                                    value={customerName}
+                                    onChange={(e) => setCustomerName(e.target.value)}
+                                    placeholder="Nome Completo"
+                                    className="bg-[#F5F2EC] border-0 px-4 py-4 text-sm focus:ring-1 focus:ring-[#A89078]"
+                                />
+                            </div>
+                            <div className="flex flex-col gap-2">
+                                <label className="text-[10px] font-bold text-[#A89078] uppercase tracking-widest">WhatsApp</label>
+                                <input
+                                    type="text"
+                                    value={customerPhone}
+                                    onChange={handlePhoneChange}
+                                    placeholder="(00) 00000-0000"
+                                    maxLength={15}
+                                    className="bg-[#F5F2EC] border-0 px-4 py-4 text-sm focus:ring-1 focus:ring-[#A89078]"
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="bg-white p-8 shadow-sm border border-[#E8E0D5]">
+                        <h2 className="font-serif text-2xl font-medium text-[#1E1A17] mb-8 border-b border-[#F5F2EC] pb-4">Seu Cesto</h2>
+                        <div className="space-y-8">
+                            {items.map((item) => (
+                                <div key={item.id} className="flex gap-6 items-center">
+                                    <div className="relative w-24 h-24 bg-[#F5F2EC] flex-shrink-0">
+                                        <Image src={item.imageUrl} alt={item.name} fill className="object-contain p-2" />
+                                    </div>
+                                    <div className="flex-1">
+                                        <h3 className="font-medium text-[#1E1A17] text-lg">{item.name}</h3>
+                                        <p className="text-[10px] text-[#A89078] font-bold uppercase tracking-widest mt-1">{item.isHot ? 'Pronta Entrega' : 'Fornada Agendada'}</p>
+                                        <p className="font-medium text-sm mt-1">R$ {item.price.toFixed(2).replace('.', ',')}</p>
+                                    </div>
+                                    <div className="flex items-center gap-4 bg-[#F5F2EC] px-4 py-2">
+                                        <button onClick={() => decreaseItem(item.id)} className="text-[#1E1A17] hover:text-[#A89078]"><Minus className="w-4 h-4" /></button>
+                                        <span className="font-bold text-sm min-w-[20px] text-center">{item.quantity}</span>
+                                        <button onClick={() => addItem(item)} className="text-[#1E1A17] hover:text-[#A89078]"><Plus className="w-4 h-4" /></button>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className="bg-white p-8 shadow-sm border border-[#E8E0D5]">
+                        <h2 className="font-serif text-2xl font-medium text-[#1E1A17] mb-8">Como deseja receber?</h2>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <button onClick={() => setDeliveryType('RETIRADA')} className={`flex items-center gap-6 p-6 border transition-all ${deliveryType === 'RETIRADA' ? 'border-[#1E1A17] bg-[#F5F2EC]' : 'border-[#E8E0D5] bg-white'}`}>
+                                <Store className="w-6 h-6" />
+                                <div className="text-left">
+                                    <span className="block font-bold text-[11px] uppercase tracking-widest">Retirada</span>
+                                    <span className="text-[10px] text-[#A89078] uppercase font-bold">Na Padaria - Grátis</span>
+                                </div>
+                            </button>
+                            <button onClick={() => setDeliveryType('ENTREGA')} className={`flex items-center gap-6 p-6 border transition-all ${deliveryType === 'ENTREGA' ? 'border-[#1E1A17] bg-[#F5F2EC]' : 'border-[#E8E0D5] bg-white'}`}>
+                                <Truck className="w-6 h-6" />
+                                <div className="text-left">
+                                    <span className="block font-bold text-[11px] uppercase tracking-widest">Entrega</span>
+                                    <span className="text-[10px] text-[#A89078] uppercase font-bold">Uber Flash - Cobrado à parte</span>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="lg:col-span-1">
+                    <div className="bg-[#1E1A17] text-white p-10 shadow-2xl sticky top-24">
+                        <h2 className="font-serif text-2xl font-medium mb-8 border-b border-white/10 pb-4">Resumo</h2>
+                        <div className="space-y-4 mb-10">
+                            <div className="flex justify-between text-sm opacity-60"><span>Subtotal</span><span>R$ {subtotal.toFixed(2).replace('.', ',')}</span></div>
+                            <div className="flex justify-between text-sm opacity-60"><span>Frete</span><span>{freight === 0 ? 'Grátis' : `R$ ${freight.toFixed(2).replace('.', ',')}`}</span></div>
+                            <div className="flex justify-between text-2xl font-medium pt-6 border-t border-white/10"><span>Total</span><span>R$ {finalTotal.toFixed(2).replace('.', ',')}</span></div>
+                        </div>
+                        <button
+                            onClick={handlePayment}
+                            disabled={isSubmitting}
+                            className="w-full bg-[#D6C1AE] text-[#1E1A17] py-5 font-bold text-[13px] tracking-[0.2em] uppercase hover:bg-[#c9af96] transition-all disabled:opacity-50"
+                        >
+                            {isSubmitting ? 'PROCESSANDO...' : 'CONFIRMAR PEDIDO'}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}
