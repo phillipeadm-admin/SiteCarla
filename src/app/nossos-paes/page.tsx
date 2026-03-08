@@ -41,27 +41,27 @@ export default async function NossosPaesPage() {
                             key={product.id}
                             className={`flex flex-col lg:flex-row gap-12 lg:gap-20 items-center ${index % 2 !== 0 ? 'lg:flex-row-reverse' : ''}`}
                         >
-                            <div className="w-full lg:w-1/2 relative aspect-square md:aspect-[4/3] overflow-visible">
+                            <div className="w-full lg:w-1/2 relative group">
                                 {product.imageUrl ? (
-                                    <>
-                                        <div className="absolute inset-0 bg-[#F0EAE1] -z-10 rounded-full scale-90 blur-2xl opacity-50"></div>
+                                    <div className="relative aspect-square md:aspect-[4/3] overflow-hidden rounded-[40px] md:rounded-[100px_30px_100px_30px] border border-[#EBE5DB] bg-white shadow-sm transition-all duration-700 hover:shadow-2xl hover:-translate-y-2">
+                                        <div className="absolute inset-0 bg-gradient-to-tr from-[#F5F2EC] to-transparent opacity-50"></div>
                                         <Image
                                             src={product.imageUrl}
                                             alt={product.name}
                                             fill
-                                            className="object-contain drop-shadow-2xl"
+                                            className="object-contain p-8 transition-transform duration-1000 group-hover:scale-110"
                                             sizes="(max-width: 1024px) 100vw, 50vw"
-                                            quality={85}
+                                            quality={90}
                                             priority={index === 0}
-                                            loading={index === 0 ? undefined : "lazy"}
                                         />
-                                    </>
+                                    </div>
                                 ) : (
-                                    <div className="w-full h-full bg-[#F0EAE1] flex items-center justify-center rounded-[32px]">
-                                        <span className="text-[#A89078] font-serif italic text-lg opacity-60">Sem fotografia</span>
+                                    <div className="w-full aspect-square md:aspect-[4/3] bg-[#EBE5DB] flex items-center justify-center rounded-[40px] md:rounded-[100px_30px_100px_30px]">
+                                        <span className="text-[#8B6E5B] font-serif italic text-lg opacity-60">Sem fotografia</span>
                                     </div>
                                 )}
                             </div>
+
 
                             <div className="w-full lg:w-1/2 flex flex-col justify-center text-center lg:text-left">
                                 <h2 className="font-serif text-[36px] md:text-[48px] font-medium text-[#1E1A17] mb-6 leading-tight">

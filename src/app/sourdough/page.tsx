@@ -118,38 +118,45 @@ export default function SourdoughPage() {
 
 
                             {/* Reheating Section */}
-                            <div className="bg-white p-8 md:p-12 rounded-[50px] text-[#3B2B23] relative border border-[#EBE5DB] overflow-hidden group shadow-sm transition-all hover:shadow-md">
-                                <h3 className="font-serif text-4xl text-[#1E1A17] mb-10 leading-tight">Quer a sensação de <br />pão saindo do forno?</h3>
-                                
-                                <div className="space-y-12">
-                                    <div className="flex flex-col md:flex-row gap-8 items-center text-center md:text-left">
-                                        <div className="w-32 h-32 bg-[#3B2B23] rounded-3xl flex items-center justify-center p-4">
-                                            <Image src="/sourdough_spray.png" alt="Spray" width={100} height={100} className="object-contain" />
+                            <div className="space-y-12">
+                                <h3 className="font-serif text-3xl text-[#1E1A17]">Quer pão saindo do forno?</h3>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                    {/* Step 01 */}
+                                    <div className="space-y-6 group">
+                                        <div className="relative aspect-square bg-[#FAF8F5] rounded-[40px] border border-[#EBE5DB] overflow-hidden transition-all group-hover:shadow-md">
+                                            <Image src="/sourdough_spray.png" alt="Borrife água" fill className="object-contain p-8 mix-blend-multiply opacity-90 group-hover:scale-105 transition-transform duration-500" />
                                         </div>
-                                        <p className="text-xs text-[#8B6E5B] uppercase tracking-[0.2em] leading-relaxed flex-1">
-                                            <span className="text-[#3B2B23] font-black block mb-2 underline">PASSO 01</span>
-                                            Borrife ou respingue umas gotinhas de água filtrada nas fatias.
-                                        </p>
+                                        <div className="flex gap-4">
+                                            <span className="w-8 h-8 rounded-full bg-[#3B2B23] text-white flex-shrink-0 flex items-center justify-center text-xs font-black shadow-sm">1</span>
+                                            <p className="text-[11px] text-[#5C4D44] uppercase font-bold tracking-widest pt-1 leading-snug">
+                                                <span className="text-[#3B2B23] block mb-1 underline">BORRIFE</span>
+                                                Borrife ou respingue umas gotinhas de água filtrada nas fatias.
+                                            </p>
+                                        </div>
                                     </div>
 
-                                    <div className="flex flex-col md:flex-row gap-8 items-center text-center md:text-left">
-                                        <div className="w-32 h-32 bg-[#3B2B23] rounded-3xl flex items-center justify-center p-4">
-                                            <Image src="/sourdough_heating.png" alt="Heating" width={100} height={100} className="object-contain" />
+                                    {/* Step 02 */}
+                                    <div className="space-y-6 group md:translate-y-6">
+                                        <div className="relative aspect-square bg-[#FAF8F5] rounded-[40px] border border-[#EBE5DB] overflow-hidden transition-all group-hover:shadow-md">
+                                            <Image src="/sourdough_heating.png" alt="Aqueça" fill className="object-contain p-8 mix-blend-multiply opacity-90 group-hover:scale-105 transition-transform duration-500" />
                                         </div>
-                                        <p className="text-xs text-[#8B6E5B] uppercase tracking-[0.2em] leading-relaxed flex-1">
-                                            <span className="text-[#3B2B23] font-black block mb-2 underline">PASSO 02</span>
-                                            Aqueça no forno, airfryer, torredeira ou frigideira bem quente.
-                                        </p>
+                                        <div className="flex gap-4">
+                                            <span className="w-8 h-8 rounded-full bg-[#3B2B23] text-white flex-shrink-0 flex items-center justify-center text-xs font-black shadow-sm">2</span>
+                                            <p className="text-[11px] text-[#5C4D44] uppercase font-bold tracking-widest pt-1 leading-snug">
+                                                <span className="text-[#3B2B23] block mb-1 underline">AQUEÇA</span>
+                                                Aqueça no forno, airfryer, torredeira ou frigideira bem quente.
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
 
-                                <div className="mt-12 pt-8 border-t border-[#EBE5DB] flex items-center gap-6">
-                                    <div className="w-10 h-10 bg-red-50 text-red-500 rounded-full flex items-center justify-center">
+                                <div className="mt-12 p-8 bg-red-50/50 rounded-[40px] border border-red-100 flex items-center gap-6">
+                                    <div className="w-12 h-12 bg-white text-red-500 rounded-2xl flex items-center justify-center shadow-sm">
                                         <Ban className="w-6 h-6" />
                                     </div>
                                     <div className="space-y-1">
                                         <p className="text-sm font-black uppercase tracking-widest text-red-600">Esqueça o microondas!</p>
-                                        <p className="text-[10px] text-[#8B6E5B] uppercase tracking-widest leading-relaxed">Ele não é um bom amigo do pão artesanal.</p>
+                                        <p className="text-[10px] text-[#8B6E5B] uppercase tracking-widest leading-relaxed font-bold">Ele não é um bom amigo do pão artesanal.</p>
                                     </div>
                                 </div>
                             </div>

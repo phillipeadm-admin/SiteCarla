@@ -1,14 +1,12 @@
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { PrismaClient } from '@prisma/client'
+const prisma = new PrismaClient()
 
 async function main() {
-    await prisma.batch.deleteMany({});
-    console.log('Todas as fornadas pré-cadastradas foram deletadas com sucesso!');
+  await prisma.orderItem.deleteMany({})
+  await prisma.batch.deleteMany({})
+  console.log('Fornadas e itens de pedido zerados com sucesso.')
 }
 
 main()
-    .catch(e => console.error(e))
-    .finally(async () => {
-        await prisma.$disconnect();
-    });
+  .catch(e => console.error(e))
+  .finally(async () => await prisma.$disconnect())
