@@ -8,7 +8,6 @@ interface Batch {
     id: string;
     availableDate: Date;
     totalCapacity: number;
-    isImmediateSale: boolean;
     productId: string;
     product: {
         name: string;
@@ -89,16 +88,10 @@ export default function EditBatchForm({ batch }: { batch: Batch }) {
                                 <input name="availableDate" type="datetime-local" defaultValue={dateString} required className="w-full bg-[#FAF5EF] border-0 rounded-2xl px-6 py-4 text-sm focus:ring-2 focus:ring-[#3B2B23]" />
                             </div>
 
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 gap-4">
                                 <div>
                                     <label className="text-[10px] font-bold text-[#8B6E5B] uppercase px-1 mb-2 block tracking-widest">Total de Pães</label>
                                     <input name="totalCapacity" type="number" defaultValue={batch.totalCapacity} required className="w-full bg-[#FAF5EF] border-0 rounded-2xl px-6 py-4 text-sm focus:ring-2 focus:ring-[#3B2B23]" />
-                                </div>
-                                <div className="flex flex-col justify-end">
-                                    <label className="flex items-center gap-3 cursor-pointer bg-[#FAF5EF] p-4 rounded-2xl border-2 border-transparent hover:border-[#EBE6DF] transition-all h-[52px]">
-                                        <input name="isImmediateSale" type="checkbox" defaultChecked={batch.isImmediateSale} className="w-5 h-5 accent-[#E66A46]" />
-                                        <span className="text-xs font-bold text-[#3B2B23] uppercase">Pronta Entrega</span>
-                                    </label>
                                 </div>
                             </div>
 

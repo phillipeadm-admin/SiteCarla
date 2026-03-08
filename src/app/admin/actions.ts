@@ -79,7 +79,6 @@ export async function createBatch(formData: FormData) {
     const productId = formData.get('productId') as string;
     const availableDate = new Date(formData.get('availableDate') as string);
     const totalCapacity = parseInt(formData.get('totalCapacity') as string);
-    const isImmediateSale = formData.get('isImmediateSale') === 'on';
 
     if (!productId || isNaN(totalCapacity)) {
         return { success: false, error: "Produto e capacidade são obrigatórios." };
@@ -91,7 +90,6 @@ export async function createBatch(formData: FormData) {
                 productId,
                 availableDate,
                 totalCapacity,
-                isImmediateSale,
             }
         });
 
@@ -108,7 +106,6 @@ export async function updateBatch(formData: FormData) {
     const id = formData.get('id') as string;
     const availableDate = new Date(formData.get('availableDate') as string);
     const totalCapacity = parseInt(formData.get('totalCapacity') as string);
-    const isImmediateSale = formData.get('isImmediateSale') === 'on';
 
     if (!id || isNaN(totalCapacity)) {
         return { success: false, error: "ID e capacidade são obrigatórios." };
@@ -120,7 +117,6 @@ export async function updateBatch(formData: FormData) {
             data: {
                 availableDate,
                 totalCapacity,
-                isImmediateSale,
             }
         });
 
@@ -142,5 +138,62 @@ export async function deleteBatch(id: string) {
     } catch (error) {
         console.error(error);
         return { success: false, error: "Erro ao cancelar fornada. Verifique relacionamentos (como pedidos)." };
+    }
+}
+
+export async function createGalleryImage(imageUrl: string) {
+    try {
+        await prisma.gallery.create({
+            data: { imageUrl }
+        });
+        revalidatePath('/admin/gallery');
+        revalidatePath('/');
+        return { success: true };
+    } catch (error) {
+        console.error(error);
+        return { success: false, error: "Erro ao adicionar imagem à galeria." };
+    }
+}
+
+export async function deleteGalleryImage(id: string) {
+    try {
+        await prisma.gallery.delete({ where: { id } });
+        revalidatePath('/admin/gallery');
+        revalidatePath('/');
+        return { success: true };
+    } catch (error) {
+        console.error(error);
+        return { success: false, error: "Erro ao excluir imagem." };
+    }
+}
+
+export async function createNotification(productId: string, name: string, phone: string) {
+    try {
+        await prisma.availabilityNotification.create({
+            data: {
+                productId,
+                customerName: name,
+                customerPhone: phone
+            }
+        });
+        revalidatePath('/admin/notifications');
+        return { success: true };
+    } catch (error) {
+        console.error(error);
+        return { success: false, error: "Erro ao registrar aviso." };
+    }
+}
+
+export async function markNotificationAsRead(id: string) {
+    try {
+        await prisma.availabilityNotification.update({
+            where: { id },
+            data: { notified: true }
+        });
+        revalidatePath('/admin/notifications');
+        return { success: true };
+    } catch (error) {
+        console.error(error);
+        return { success: false, error: "Erro ao atualizar notificação." };
     }
 }

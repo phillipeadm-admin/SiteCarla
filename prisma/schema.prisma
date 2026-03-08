@@ -17,7 +17,8 @@ model Product {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  batches     Batch[]
+  batches       Batch[]
+  notifications AvailabilityNotification[]
 }
 
 model Batch {
@@ -28,7 +29,6 @@ model Batch {
   availableDate   DateTime // Data/Hora em que a fornada ficará (ou ficou) disponível
   totalCapacity   Int      // Capacidade total do forno para essa fornada
   soldQuantity    Int      @default(0) // Quantos já foram vendidos / encomendados
-  isImmediateSale Boolean  @default(false) // Define se é "Pronta Entrega"
   
   orderItems      OrderItem[]
 
@@ -64,4 +64,20 @@ model OrderItem {
   pricePaid Float    // Snapshot do preço pago no momento
 
   createdAt DateTime @default(now())
+}
+
+model Gallery {
+  id        String   @id @default(uuid())
+  imageUrl  String
+  createdAt DateTime @default(now())
+}
+
+model AvailabilityNotification {
+  id            String   @id @default(uuid())
+  productId     String
+  product       Product  @relation(fields: [productId], references: [id])
+  customerName  String
+  customerPhone String
+  notified      Boolean  @default(false)
+  createdAt     DateTime @default(now())
 }

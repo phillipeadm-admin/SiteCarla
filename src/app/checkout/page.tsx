@@ -6,12 +6,15 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
 import { createOrder } from './actions';
+import CartTimer from '@/components/CartTimer';
 
 export default function CheckoutPage() {
     const { items, addItem, decreaseItem, removeItem, total, finishOrder } = useCartStore();
     const [deliveryType, setDeliveryType] = useState<'RETIRADA' | 'ENTREGA'>('RETIRADA');
     const [customerName, setCustomerName] = useState('');
     const [customerPhone, setCustomerPhone] = useState('');
+    const [zipCode, setZipCode] = useState('');
+    const [address, setAddress] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
 
@@ -25,11 +28,18 @@ export default function CheckoutPage() {
             return;
         }
 
+        if (deliveryType === 'ENTREGA' && (!address || !zipCode)) {
+            alert('Por favor, preencha o endereço completo para entrega.');
+            return;
+        }
+
         setIsSubmitting(true);
         const result = await createOrder({
             customerName,
             customerPhone,
             deliveryType,
+            address,
+            zipCode,
             totalAmount: finalTotal,
             items: items.map(i => ({
                 batchId: i.id,
@@ -38,11 +48,10 @@ export default function CheckoutPage() {
             }))
         });
 
-        if (result.success) {
-            finishOrder();
-            setIsSuccess(true);
+        if (result.success && result.paymentUrl) {
+            window.location.href = result.paymentUrl;
         } else {
-            alert('Erro ao processar pedido. Tente novamente.');
+            alert(result.error || 'Erro ao processar pedido. Tente novamente.');
             setIsSubmitting(false);
         }
     };
@@ -106,7 +115,12 @@ export default function CheckoutPage() {
                         <ArrowLeft className="w-4 h-4" /> Voltar
                     </Link>
 
-                    <h1 className="font-serif text-[40px] md:text-[56px] font-medium text-[#1E1A17] mb-8 leading-tight">Finalizar Pedido</h1>
+                    <div className="flex justify-between items-end mb-8">
+                        <h1 className="font-serif text-[40px] md:text-[56px] font-medium text-[#1E1A17] leading-tight">Finalizar Pedido</h1>
+                        <div className="mb-2">
+                            <CartTimer />
+                        </div>
+                    </div>
 
                     {/* Identificação */}
                     <div className="bg-white p-8 shadow-sm border border-[#E8E0D5]">
@@ -161,7 +175,7 @@ export default function CheckoutPage() {
 
                     <div className="bg-white p-8 shadow-sm border border-[#E8E0D5]">
                         <h2 className="font-serif text-2xl font-medium text-[#1E1A17] mb-8">Como deseja receber?</h2>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                             <button onClick={() => setDeliveryType('RETIRADA')} className={`flex items-center gap-6 p-6 border transition-all ${deliveryType === 'RETIRADA' ? 'border-[#1E1A17] bg-[#F5F2EC]' : 'border-[#E8E0D5] bg-white'}`}>
                                 <Store className="w-6 h-6" />
                                 <div className="text-left">
@@ -177,6 +191,34 @@ export default function CheckoutPage() {
                                 </div>
                             </button>
                         </div>
+
+                        {deliveryType === 'ENTREGA' && (
+                            <div className="space-y-6 animate-in slide-in-from-top-4 duration-300">
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                    <div className="md:col-span-1">
+                                        <label className="text-[10px] font-bold text-[#A89078] uppercase tracking-widest mb-2 block">CEP</label>
+                                        <input
+                                            type="text"
+                                            value={zipCode}
+                                            onChange={(e) => setZipCode(e.target.value)}
+                                            placeholder="00000-000"
+                                            className="w-full bg-[#F5F2EC] border-0 px-4 py-4 text-sm focus:ring-1 focus:ring-[#A89078]"
+                                        />
+                                    </div>
+                                    <div className="md:col-span-2">
+                                        <label className="text-[10px] font-bold text-[#A89078] uppercase tracking-widest mb-2 block">Rua, Número e Bairro</label>
+                                        <input
+                                            type="text"
+                                            value={address}
+                                            onChange={(e) => setAddress(e.target.value)}
+                                            placeholder="Ex: Rua das Flores, 123 - Centro"
+                                            className="w-full bg-[#F5F2EC] border-0 px-4 py-4 text-sm focus:ring-1 focus:ring-[#A89078]"
+                                        />
+                                    </div>
+                                </div>
+                                <p className="text-[10px] italic text-[#A89078]">O valor do frete será calculado e cobrado separadamente via WhatsApp.</p>
+                            </div>
+                        )}
                     </div>
                 </div>
 

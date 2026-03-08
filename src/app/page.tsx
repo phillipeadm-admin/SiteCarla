@@ -1,4 +1,3 @@
-// Build trigger: 2026-03-04 13:54 - Testing Deploy visibility
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import ProductCard from "@/components/ProductCard";
@@ -6,6 +5,7 @@ import FloatingCart from "@/components/FloatingCart";
 import FloatingWhatsApp from "@/components/FloatingWhatsApp";
 import Footer from "@/components/Footer";
 import prisma from "@/lib/prisma";
+import GallerySection from "@/components/GallerySection";
 
 export const revalidate = 60; // Cache de 60 segundos para melhorar performance
 
@@ -25,26 +25,29 @@ export default async function Home() {
     }
   });
 
+  const galleryImages = await prisma.gallery.findMany({
+    orderBy: { createdAt: 'desc' }
+  });
+
   const products = productsFromDb.map(p => {
-    const activeBatch = p.batches[0];
-    let availability = "Sem previsão";
-    let isHot = false;
+    const activeBatch = p.batches.find(b => b.totalCapacity > b.soldQuantity);
+    let availability = "Sem estoque";
     let batchId = "";
+    let availableQuantity = 0;
 
     if (activeBatch) {
       batchId = activeBatch.id;
-      isHot = activeBatch.isImmediateSale;
-
-      if (isHot) {
+      const date = new Date(activeBatch.availableDate);
+      const isToday = date.toDateString() === new Date().toDateString();
+      
+      if (isToday) {
         availability = "Pronta Entrega Agora";
       } else {
-        const date = new Date(activeBatch.availableDate);
         const dayName = date.toLocaleDateString('pt-BR', { weekday: 'short' });
         const dayNum = date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' });
-        const remaining = activeBatch.totalCapacity - activeBatch.soldQuantity;
-
-        availability = `Disponível ${dayName}, ${dayNum} (${remaining} un. restantes)`;
+        availability = `Disponível ${dayName}, ${dayNum}`;
       }
+      availableQuantity = activeBatch.totalCapacity - activeBatch.soldQuantity;
     }
 
     return {
@@ -55,8 +58,7 @@ export default async function Home() {
       imageUrl: p.imageUrl || "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=800&q=80",
       price: p.price,
       availability,
-      isHot,
-      availableQuantity: activeBatch ? Math.max(0, activeBatch.totalCapacity - activeBatch.soldQuantity) : 0
+      availableQuantity
     };
   });
 
@@ -143,7 +145,7 @@ export default async function Home() {
         {/* Products Horizontal Scroll / Carousel */}
         <div id="assinatura" className="w-full relative z-20 mt-16 px-4 md:px-10">
           <div className="flex overflow-x-auto gap-8 md:gap-12 pb-16 no-scrollbar snap-x snap-mandatory cursor-grab active:cursor-grabbing">
-            {products.filter(p => p.batchId).map(product => (
+            {products.map(product => (
               <div key={product.id} className="min-w-[300px] md:min-w-[400px] snap-center transition-all duration-500 hover:scale-[1.02]">
                 <ProductCard product={product} />
               </div>
@@ -155,6 +157,9 @@ export default async function Home() {
             <div className="w-12 h-[2px] bg-[#1E1A17] opacity-20"></div>
           </div>
         </div>
+
+        {/* Gallery Section */}
+        <GallerySection images={galleryImages} />
 
       </div>
 

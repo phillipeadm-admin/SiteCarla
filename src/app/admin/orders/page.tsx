@@ -45,10 +45,21 @@ export default async function AdminOrders() {
                                     <Calendar className="w-3 h-3" /> {new Date(order.createdAt).toLocaleDateString()}
                                 </div>
                                 {order.address && (
-                                    <div className="flex items-center gap-1 text-[11px] font-bold text-[#8B6E5B] uppercase italic">
+                                    <a 
+                                        href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(order.address)}`} 
+                                        target="_blank"
+                                        className="flex items-center gap-1 text-[11px] font-bold text-blue-600 uppercase hover:underline"
+                                    >
                                         <MapPin className="w-3 h-3" /> {order.address.slice(0, 30)}...
-                                    </div>
+                                    </a>
                                 )}
+                                <a 
+                                    href={`https://wa.me/55${order.customerPhone.replace(/\D/g, '')}?text=${encodeURIComponent(`Olá ${order.customerName}, seu pedido da Romagnolle já foi enviado! 🍞✨`)}`}
+                                    target="_blank"
+                                    className="flex items-center gap-1 text-[10px] font-bold text-green-600 uppercase bg-green-50 px-3 py-1 rounded-lg hover:bg-green-100"
+                                >
+                                    WhatsApp
+                                </a>
                             </div>
                         </div>
 

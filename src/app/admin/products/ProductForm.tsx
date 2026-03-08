@@ -28,7 +28,7 @@ export default function ProductForm() {
                 onClick={() => setIsOpen(true)}
                 className="bg-[#3B2B23] text-white px-6 py-3 rounded-2xl flex items-center gap-2 font-bold hover:bg-[#5C4D44] transition-all shadow-sm"
             >
-                <Plus className="w-5 h-5" /> Novo Pão
+                <Plus className="w-5 h-5" /> Novo Produto
             </button>
 
             {isOpen && (
