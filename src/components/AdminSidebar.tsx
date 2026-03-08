@@ -1,9 +1,25 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Package, Utensils, ClipboardList, LayoutDashboard, ArrowLeft, LogOut, Image, Bell } from 'lucide-react';
+import { getPendingNotificationsCount } from '../app/admin/actions';
 
 export default function AdminSidebar() {
+    const [pendingCount, setPendingCount] = useState(0);
+
+    useEffect(() => {
+        const fetchCount = async () => {
+            const count = await getPendingNotificationsCount();
+            setPendingCount(count);
+        };
+        fetchCount();
+        
+        // Opcional: Polling a cada 30 segundos
+        const interval = setInterval(fetchCount, 30000);
+        return () => clearInterval(interval);
+    }, []);
+
     const handleLogout = async () => {
         await fetch('/api/admin/logout', { method: 'POST' });
         window.location.href = '/admin/login';
@@ -38,7 +54,9 @@ export default function AdminSidebar() {
                 <Link href="/admin/notifications" className="flex items-center gap-3 p-3 rounded-xl hover:bg-white/10 transition-all duration-300 group relative hover:translate-x-2">
                     <div className="w-5 h-5 flex items-center justify-center relative">
                         <Bell className="w-5 h-5 text-[#B9A38C] group-hover:text-white" />
-                        <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-[#3B2B23] animate-pulse"></span>
+                        {pendingCount > 0 && (
+                            <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-[#3B2B23] animate-pulse"></span>
+                        )}
                     </div>
                     <span className="font-medium text-sm">Notificações</span>
                 </Link>

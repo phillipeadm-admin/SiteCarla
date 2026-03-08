@@ -207,3 +207,16 @@ export async function markNotificationAsRead(id: string) {
         return { success: false, error: "Erro ao atualizar notificação." };
     }
 }
+
+export async function getPendingNotificationsCount() {
+    try {
+        const count = await prisma.availabilityNotification.count({
+            where: { notified: false }
+        });
+        return count;
+    } catch (error) {
+        console.error(error);
+        return 0;
+    }
+}
+
