@@ -79,6 +79,7 @@ export async function createBatch(formData: FormData) {
     const productId = formData.get('productId') as string;
     const availableDate = new Date(formData.get('availableDate') as string);
     const totalCapacity = parseInt(formData.get('totalCapacity') as string);
+    const observation = formData.get('observation') as string;
 
     const isImmediateSale = formData.get('isImmediateSale') === 'on';
 
@@ -93,6 +94,7 @@ export async function createBatch(formData: FormData) {
                 availableDate,
                 totalCapacity,
                 isImmediateSale,
+                observation: observation || null,
             }
         });
 
@@ -109,6 +111,7 @@ export async function updateBatch(formData: FormData) {
     const id = formData.get('id') as string;
     const availableDate = new Date(formData.get('availableDate') as string);
     const totalCapacity = parseInt(formData.get('totalCapacity') as string);
+    const observation = formData.get('observation') as string;
 
     const isImmediateSale = formData.get('isImmediateSale') === 'on';
 
@@ -123,6 +126,7 @@ export async function updateBatch(formData: FormData) {
                 availableDate,
                 totalCapacity,
                 isImmediateSale,
+                observation: observation || null,
             }
         });
 

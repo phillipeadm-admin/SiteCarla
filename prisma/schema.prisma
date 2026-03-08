@@ -31,6 +31,8 @@ model Batch {
   soldQuantity    Int      @default(0) // Quantos já foram vendidos / encomendados
   
   isImmediateSale Boolean  @default(false) // Indica se é uma venda imediata (queima de estoque)
+  observation     String?  // Campo de observação facultativo
+  
   orderItems      OrderItem[]
 
   createdAt       DateTime @default(now())

@@ -35,10 +35,6 @@ export default function AdminSidebar() {
                     <Utensils className="w-5 h-5 text-[#B9A38C] group-hover:text-white" />
                     <span className="font-medium text-sm">Produtos</span>
                 </Link>
-                <Link href="/admin/gallery" className="flex items-center gap-3 p-3 rounded-xl hover:bg-white/10 transition-colors group">
-                    <Image className="w-5 h-5 text-[#B9A38C] group-hover:text-white" />
-                    <span className="font-medium text-sm">Galeria</span>
-                </Link>
                 <Link href="/admin/notifications" className="flex items-center gap-3 p-3 rounded-xl hover:bg-white/10 transition-colors group relative">
                     <div className="w-5 h-5 flex items-center justify-center relative">
                         <Bell className="w-5 h-5 text-[#B9A38C] group-hover:text-white" />
@@ -49,6 +45,10 @@ export default function AdminSidebar() {
             </nav>
 
             <div className="pt-6 border-t border-white/10 mt-auto space-y-4">
+                <Link href="/admin/gallery" className="flex items-center gap-3 p-3 rounded-xl hover:bg-white/10 transition-colors group">
+                    <Image className="w-5 h-5 text-[#B9A38C] group-hover:text-white" />
+                    <span className="font-medium text-sm">Galeria (Vitrine)</span>
+                </Link>
                 <Link href="/" target="_blank" className="flex items-center gap-3 p-3 text-xs font-bold uppercase tracking-widest bg-white/5 rounded-xl hover:bg-white/10 transition-all opacity-80 hover:opacity-100 italic">
                     <ArrowLeft className="w-4 h-4" /> Ver Site Inicial
                 </Link>

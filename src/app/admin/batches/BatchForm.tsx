@@ -67,23 +67,18 @@ export default function BatchForm({ products }: { products: Product[] }) {
                                 <input name="availableDate" type="datetime-local" defaultValue={getLocalFormattedDate()} required className="w-full bg-[#FAF5EF] border-0 rounded-2xl px-6 py-4 text-sm focus:ring-2 focus:ring-[#3B2B23]" />
                             </div>
 
-                            <div className="grid grid-cols-1 gap-4">
-                                <div>
-                                    <label className="text-[10px] font-bold text-[#8B6E5B] uppercase px-1 mb-2 block tracking-widest">Quantidade Total (Fornada)</label>
-                                    <input name="totalCapacity" type="number" required placeholder="0" className="w-full bg-[#FAF5EF] border-0 rounded-2xl px-6 py-4 text-sm focus:ring-2 focus:ring-[#3B2B23]" />
-                                </div>
+                            <div>
+                                <label className="text-[10px] font-bold text-[#8B6E5B] uppercase px-1 mb-2 block tracking-widest">Quantidade Total desta Fornada</label>
+                                <input name="totalCapacity" type="number" required placeholder="0" className="w-full bg-[#FAF5EF] border-0 rounded-2xl px-6 py-4 text-sm focus:ring-2 focus:ring-[#3B2B23]" />
                             </div>
 
-                            <div className="flex items-center gap-3 bg-[#FAF5EF] p-4 rounded-2xl cursor-pointer hover:bg-[#F3EBE1] transition-colors">
-                                <input 
-                                    type="checkbox" 
-                                    name="isImmediateSale" 
-                                    id="isImmediateSale"
-                                    className="w-5 h-5 accent-[#E66A46] cursor-pointer"
+                            <div>
+                                <label className="text-[10px] font-bold text-[#8B6E5B] uppercase px-1 mb-2 block tracking-widest">Observação (Opcional)</label>
+                                <textarea 
+                                    name="observation" 
+                                    placeholder="Ex: Fornada especial de fermentação natural..." 
+                                    className="w-full bg-[#FAF5EF] border-0 rounded-2xl px-6 py-4 text-sm focus:ring-2 focus:ring-[#3B2B23] min-h-[100px] resize-none"
                                 />
-                                <label htmlFor="isImmediateSale" className="text-sm font-bold text-[#3B2B23] cursor-pointer">
-                                    Venda Imediata (Queima de Estoque)
-                                </label>
                             </div>
 
                             <button
@@ -91,7 +86,7 @@ export default function BatchForm({ products }: { products: Product[] }) {
                                 disabled={isSubmitting}
                                 className="w-full bg-[#E66A46] text-white py-5 rounded-2xl font-black text-lg shadow-lg hover:bg-[#D1744A] transition-all disabled:opacity-50"
                             >
-                                {isSubmitting ? 'AGENDANDO...' : 'CRIAR FORNADA'}
+                                {isSubmitting ? 'CRIANDO...' : 'CRIAR FORNADA'}
                             </button>
                         </form>
                     </div>

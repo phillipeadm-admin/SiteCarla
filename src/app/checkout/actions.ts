@@ -79,11 +79,33 @@ export async function createOrder(data: {
 
 export async function confirmOrderPayment(orderId: string) {
     try {
-        await prisma.order.update({
+        const order = await prisma.order.findUnique({
             where: { id: orderId },
-            data: { status: "PAID" }
+            include: { items: true }
         });
+
+        if (!order || order.status === "PAID") return { success: true };
+
+        // Atualizar status do pedido e estoque das fornadas
+        await prisma.$transaction(async (tx) => {
+            await tx.order.update({
+                where: { id: orderId },
+                data: { status: "PAID" }
+            });
+
+            for (const item of order.items) {
+                await tx.batch.update({
+                    where: { id: item.batchId },
+                    data: {
+                        soldQuantity: { increment: item.quantity }
+                    }
+                });
+            }
+        });
+
         revalidatePath('/admin/orders');
+        revalidatePath('/admin/batches');
+        revalidatePath('/');
         return { success: true };
     } catch (error) {
         console.error("Erro ao confirmar pagamento:", error);
