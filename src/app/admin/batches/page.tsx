@@ -33,66 +33,71 @@ export default async function AdminBatches() {
                     
                     return (
                         <div key={product.id} className="bg-white rounded-[40px] shadow-sm border border-[#EBE6DF] overflow-hidden">
-                            <div className="bg-[#FAF5EF] p-8 md:p-10 flex flex-col md:flex-row justify-between items-center gap-6 border-b border-[#EBE6DF]">
-                                <div className="flex items-center gap-6">
-                                    <div className="w-20 h-20 bg-white rounded-3xl flex items-center justify-center shadow-sm border border-[#EBE6DF]">
+                            <div className="p-8 md:p-10 flex flex-col xl:flex-row justify-between items-start gap-10">
+                                {/* Info do Produto */}
+                                <div className="flex items-center gap-6 min-w-[280px]">
+                                    <div className="w-20 h-20 bg-[#FAF5EF] rounded-3xl flex items-center justify-center border border-[#EBE6DF]">
                                         <Package className="w-10 h-10 text-[#3B2B23]" />
                                     </div>
                                     <div>
-                                        <h2 className="font-serif text-3xl font-black text-[#3B2B23] uppercase tracking-tight">{product.name}</h2>
+                                        <h2 className="font-serif text-3xl font-black text-[#3B2B23] uppercase tracking-tight leading-tight">{product.name}</h2>
                                         <p className="text-[#8B6E5B] text-[10px] font-bold uppercase tracking-widest mt-1 flex items-center gap-2">
-                                            <Hash className="w-3 h-3 text-[#E66A46]" /> {product.batches.length} {product.batches.length === 1 ? 'Fornada Ativa' : 'Fornadas Ativas'}
+                                            <Hash className="w-3 h-3 text-[#E66A46]" /> {product.batches.length} Fornadas Ativas
                                         </p>
                                     </div>
                                 </div>
                                 
-                                <div className="bg-white px-8 py-5 rounded-3xl border border-[#EBE6DF] shadow-sm text-center min-w-[180px]">
-                                    <span className="block text-[10px] font-bold text-[#8B6E5B] uppercase tracking-[0.2em] mb-1">Total em Estoque</span>
-                                    <span className="text-4xl font-black text-[#3B2B23]">{totalAvailable}</span>
-                                    <span className="text-xs font-bold text-[#8B6E5B] ml-2">unid.</span>
-                                </div>
-                            </div>
+                                <div className="flex flex-col md:flex-row gap-8 w-full xl:w-auto items-start xl:items-center">
+                                    {/* Total em Estoque */}
+                                    <div className="bg-[#3B2B23] px-10 py-6 rounded-3xl shadow-xl text-center min-w-[200px]">
+                                        <span className="block text-[10px] font-bold text-white/60 uppercase tracking-[0.2em] mb-1">Total em Estoque</span>
+                                        <span className="text-5xl font-black text-white">{totalAvailable}</span>
+                                        <span className="text-xs font-bold text-white/40 ml-2">unid.</span>
+                                    </div>
 
-                            <div className="p-4 md:p-8">
-                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                    {product.batches.map((batch) => (
-                                        <div key={batch.id} className="bg-[#FAF5EF]/50 hover:bg-[#FAF5EF] transition-all rounded-3xl p-6 border border-[#EBE6DF] group">
-                                            <div className="flex justify-between items-start mb-4">
-                                                <div className="flex items-center gap-3">
-                                                    <div className="bg-white p-2.5 rounded-xl shadow-sm border border-[#EBE6DF]">
-                                                        <Calendar className="w-4 h-4 text-[#E66A46]" />
-                                                    </div>
-                                                    <div>
-                                                        <p className="text-[11px] font-black text-[#3B2B23] uppercase">
-                                                            {new Date(batch.availableDate).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })}
-                                                        </p>
-                                                        <p className="text-[10px] text-[#8B6E5B] font-bold flex items-center gap-1">
-                                                            <Clock className="w-3 h-3" /> {new Date(batch.availableDate).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                                <div className="text-right">
-                                                    <span className="block text-[9px] font-bold text-[#8B6E5B] uppercase tracking-wider">Disponível</span>
-                                                    <span className="text-lg font-black text-[#3B2B23]">{batch.totalCapacity - batch.soldQuantity}</span>
-                                                </div>
-                                            </div>
-
-                                            {batch.observation && (
-                                                <p className="text-[11px] text-[#8B6E5B] italic bg-white/60 p-3 rounded-xl mb-4 border border-[#EBE6DF]/50">
-                                                    "{batch.observation}"
-                                                </p>
-                                            )}
-
-                                            <div className="h-1.5 w-full bg-[#EBE6DF] rounded-full overflow-hidden mb-4">
-                                                <div 
-                                                    style={{ width: `${(batch.soldQuantity / batch.totalCapacity) * 100}%` }}
-                                                    className="h-full bg-[#3B2B23] rounded-full"
-                                                />
-                                            </div>
-
-                                            <EditBatchForm batch={{ ...batch, product: { name: product.name } }} />
+                                    {/* Lista de Fornadas (Caixinhas Pequenas ao lado) */}
+                                    <div className="flex-1 w-full max-h-[300px] overflow-y-auto pr-2 space-y-3 custom-scrollbar">
+                                        <div className="text-[10px] font-bold text-[#8B6E5B] uppercase tracking-widest mb-4 flex items-center gap-2">
+                                            <div className="w-1 h-3 bg-[#E66A46] rounded-full" /> Detalhes das Fornadas
                                         </div>
-                                    ))}
+                                        <div className="flex flex-col gap-3">
+                                            {product.batches.map((batch) => (
+                                                <div key={batch.id} className="bg-[#FAF5EF]/60 hover:bg-[#FAF5EF] transition-all rounded-2xl p-4 border border-[#EBE6DF] flex items-center justify-between group">
+                                                    <div className="flex items-center gap-4">
+                                                        <div className="bg-white p-2 rounded-lg border border-[#EBE6DF]">
+                                                            <Calendar className="w-4 h-4 text-[#E66A46]" />
+                                                        </div>
+                                                        <div>
+                                                            <p className="text-[11px] font-black text-[#3B2B23] uppercase">
+                                                                {new Date(batch.availableDate).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })}
+                                                            </p>
+                                                            <p className="text-[10px] text-[#8B6E5B] font-bold flex items-center gap-1">
+                                                                <Clock className="w-3 h-3" /> {new Date(batch.availableDate).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="flex items-center gap-8">
+                                                        <div className="text-right">
+                                                            <span className="block text-[8px] font-bold text-[#8B6E5B] uppercase tracking-wider">Disponível</span>
+                                                            <span className="text-sm font-black text-[#3B2B23]">{batch.totalCapacity - batch.soldQuantity}</span>
+                                                        </div>
+                                                        {batch.observation && (
+                                                            <div className="h-8 w-[1px] bg-[#EBE6DF] hidden md:block" />
+                                                        )}
+                                                        {batch.observation && (
+                                                            <p className="text-[10px] text-[#8B6E5B] italic max-w-[120px] line-clamp-1 hidden md:block" title={batch.observation}>
+                                                                "{batch.observation}"
+                                                            </p>
+                                                        )}
+                                                        <div className="opacity-0 group-hover:opacity-100 transition-opacity">
+                                                            <EditBatchForm batch={{ ...batch, product: { name: product.name } }} />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

@@ -28,7 +28,10 @@ export default function Footer() {
                             <Link href="/#top" className="hover:text-[#A89078] transition-colors">Início</Link>
                         </li>
                         <li>
-                            <Link href="/nossos-paes" className="hover:text-[#A89078] transition-colors">Nossos Pães</Link>
+                            <Link href="/nossos-paes" className="hover:text-[#A89078] transition-colors">Nossos Produtos</Link>
+                        </li>
+                        <li>
+                            <Link href="/sourdough" className="hover:text-[#A89078] transition-colors">Sourdough</Link>
                         </li>
                         <li>
                             <Link href="#assinatura" className="hover:text-[#A89078] transition-colors">Fornadas</Link>

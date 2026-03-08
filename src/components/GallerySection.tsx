@@ -1,7 +1,5 @@
 import Image from "next/image";
 
-import SourdoughGuide from "./SourdoughGuide";
-
 interface GalleryImage {
     id: string;
     imageUrl: string;
@@ -11,41 +9,36 @@ export default function GallerySection({ images }: { images: GalleryImage[] }) {
     if (images.length === 0) return null;
 
     return (
-        <section className="w-full mt-24 mb-32 px-4 md:px-10">
-            <div className="flex flex-col items-center text-center mb-16">
-                <span className="text-[#8B6E5B] font-bold text-[10px] uppercase tracking-[0.3em] mb-4">Inspiração Diária</span>
-                <div className="flex flex-col md:flex-row items-center gap-6 justify-center">
-                    <h2 className="font-serif text-4xl md:text-5xl text-[#1E1A17] tracking-tight">Nossos Pães</h2>
-                    <SourdoughGuide />
-                </div>
-                <div className="w-12 h-[2px] bg-[#D6C1AE] mt-4"></div>
+        <section className="w-full mt-32 mb-40 px-6 md:px-12">
+            <div className="flex flex-col items-center text-center mb-20">
+                <span className="text-[#8B6E5B] font-bold text-[10px] uppercase tracking-[0.4em] mb-4">Galeria de Inspiração</span>
+                <h2 className="font-serif text-4xl md:text-6xl text-[#1E1A17] tracking-tight">Nossos Produtos</h2>
+                <div className="w-16 h-[1px] bg-[#D6C1AE] mt-6 opacity-60"></div>
             </div>
 
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+            <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 md:gap-4">
                 {images.map((image, index) => (
                     <div 
                         key={image.id} 
-                        className={`group relative overflow-hidden bg-[#EBE5DB] aspect-[4/5] ${
-                            index % 2 !== 0 ? 'md:mt-10' : ''
+                        className={`group relative overflow-hidden bg-white aspect-square rounded-[24px] md:rounded-[32px] transition-all duration-700 hover:shadow-[0_20px_40px_rgba(59,43,35,0.1)] hover:-translate-y-2 ${
+                            index % 2 !== 0 ? 'md:translate-y-6' : ''
                         }`}
                     >
+                        <div className="absolute inset-0 border border-[#EBE5DB] rounded-[24px] md:rounded-[32px] z-10 pointer-events-none group-hover:border-[#3B2B23]/10 transition-colors"></div>
                         <Image
                             src={image.imageUrl}
-                            alt="Foto do produto"
+                            alt="Momento Romagnolle"
                             fill
-                            className="object-cover transition-transform duration-1000 group-hover:scale-110"
-                            sizes="(max-width: 768px) 50vw, 25vw"
+                            className="object-cover grayscale-[20%] group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-110"
+                            sizes="(max-width: 768px) 33vw, 16vw"
                         />
-                        <div className="absolute inset-0 bg-[#3B2B23]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-700 flex items-center justify-center">
-                            <div className="w-10 h-10 border border-white/40 rounded-full flex items-center justify-center text-white scale-0 group-hover:scale-100 transition-transform duration-500">
-                                <span className="sr-only">Ver mais</span>
-                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                                </svg>
-                            </div>
-                        </div>
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#3B2B23]/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
                     </div>
                 ))}
+            </div>
+            
+            <div className="mt-24 flex justify-center">
+                <p className="text-[10px] font-bold text-[#8B6E5B] uppercase tracking-[0.5em] opacity-40">Artesanal • Natural • Feito com Tempo</p>
             </div>
         </section>
     );

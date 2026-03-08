@@ -28,7 +28,7 @@ export default async function NossosPaesPage() {
             <div className="flex-1 pt-40 pb-24 px-6 md:px-12 lg:px-20 max-w-7xl mx-auto w-full relative z-10">
                 <div className="text-center mb-24 max-w-3xl mx-auto">
                     <h1 className="font-serif text-[45px] md:text-[64px] lg:text-[80px] font-medium text-[#1E1A17] leading-[1] mb-6">
-                        Nossos Pães
+                        Nossos Produtos
                     </h1>
                     <p className="text-[#5C5552] text-[13px] md:text-[15px] tracking-wide leading-relaxed font-medium px-4 uppercase">
                         O tempo é o nosso ingrediente secreto. Resgatamos a essência da panificação tradicional.

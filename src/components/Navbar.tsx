@@ -42,7 +42,8 @@ export default function Navbar() {
                 {/* Menu Links - Now on the right */}
                 <div className="flex items-center gap-6 md:gap-10">
                     <Link href="/#top" className="text-[10px] md:text-[12px] font-bold text-[#1E1A17] hover:text-[#A89078] transition-colors tracking-[0.15em] uppercase">Início</Link>
-                    <Link href="/nossos-paes" className="text-[10px] md:text-[12px] font-bold text-[#1E1A17] hover:text-[#A89078] transition-colors tracking-[0.15em] uppercase">Nossos Pães</Link>
+                    <Link href="/nossos-paes" className="text-[10px] md:text-[12px] font-bold text-[#1E1A17] hover:text-[#A89078] transition-colors tracking-[0.15em] uppercase">Nossos Produtos</Link>
+                    <Link href="/sourdough" className="text-[10px] md:text-[12px] font-bold text-[#1E1A17] hover:text-[#A89078] transition-colors tracking-[0.15em] uppercase">Sourdough</Link>
                 </div>
 
                 {/* Right Actions */}
