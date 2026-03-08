@@ -1,6 +1,10 @@
 import { Info, Zap, Heart, Thermometer, Box, Droplets, Flame, Ban, Scissors, ChevronLeft } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import Navbar from '@/components/Navbar';
+import FloatingWhatsApp from '@/components/FloatingWhatsApp';
+import FloatingCart from '@/components/FloatingCart';
+import Footer from '@/components/Footer';
 
 const benefits = [
     { title: "Digestão", description: "Facilita o processo digestivo através da quebra do glúten.", icon: Zap },
@@ -12,14 +16,17 @@ const benefits = [
 
 export default function SourdoughPage() {
     return (
-        <main className="min-h-screen bg-[#FAF8F5] md:p-10 p-4">
-            <div className="max-w-7xl mx-auto">
-                {/* Header / Back Link */}
-                <div className="mb-12 flex items-center justify-between">
-                    <Link href="/" className="flex items-center gap-2 text-[#8B6E5B] hover:text-[#3B2B23] transition-all font-bold uppercase text-[10px] tracking-widest">
-                        <ChevronLeft className="w-4 h-4" /> Voltar ao Início
-                    </Link>
-                    <div className="h-[1px] flex-1 bg-[#EBE5DB] ml-8 opacity-50"></div>
+        <main className="min-h-screen bg-[#F5F2EC] flex flex-col font-sans">
+            <Navbar />
+            
+            <div className="flex-1 pt-32 md:pt-40 pb-24 px-4 md:px-10 max-w-7xl mx-auto w-full">
+                {/* Intro Section */}
+                <div className="text-center mb-16 max-w-3xl mx-auto">
+                    <span className="text-[#8B6E5B] font-bold text-[10px] uppercase tracking-[0.4em] mb-4 block">Manifesto de Qualidade</span>
+                    <h1 className="font-serif text-[45px] md:text-[64px] lg:text-[80px] font-medium text-[#1E1A17] leading-[1.1] mb-8">
+                        O Segredo do <span className="italic">Sourdough</span>
+                    </h1>
+                    <div className="w-16 h-[1px] bg-[#D6C1AE] mx-auto opacity-60"></div>
                 </div>
 
                 <div className="bg-white rounded-[60px] shadow-sm border border-[#EBE5DB] overflow-hidden">
@@ -28,10 +35,7 @@ export default function SourdoughPage() {
                         <div className="p-8 md:p-20 bg-[#FAF8F5]/50 border-r border-[#EBE5DB]">
                             <div className="space-y-12">
                                 <div>
-                                    <span className="text-[#8B6E5B] font-bold text-[10px] uppercase tracking-[0.4em] mb-4 block">Manifesto de Qualidade</span>
-                                    <h1 className="font-serif text-6xl md:text-8xl text-[#1E1A17] tracking-tight leading-[0.9] mb-8">
-                                        O Segredo do <span className="italic">Sourdough</span>
-                                    </h1>
+                                    <h2 className="font-serif text-3xl text-[#1E1A17] mb-6">Por que escolher fermentação natural?</h2>
                                     <p className="text-[#5C4D44] text-sm md:text-base font-medium leading-relaxed max-w-md">
                                         Alguns benefícios ao se consumir pães e produtos preparados com a levedura natural são a alma da nossa produção.
                                     </p>
@@ -62,8 +66,8 @@ export default function SourdoughPage() {
                             <div className="group">
                                 <h3 className="font-serif text-3xl text-[#1E1A17] mb-6">Pão sempre fresco? Sim!</h3>
                                 <div className="bg-[#FAF8F5] p-8 rounded-[40px] border border-[#EBE5DB] flex flex-col md:flex-row gap-8 items-center transition-all group-hover:shadow-md">
-                                    <div className="relative w-48 h-48 bg-white rounded-3xl overflow-hidden border border-[#EBE5DB]">
-                                        <Image src="/sourdough_freezing.png" alt="Freezing bread" fill className="object-contain p-4 mix-blend-multiply opacity-80" />
+                                    <div className="relative w-64 h-64 bg-white rounded-3xl overflow-hidden border border-[#EBE5DB] flex-shrink-0">
+                                        <Image src="/sourdough_freezing.png" alt="Freezing bread" fill className="object-contain p-6 mix-blend-multiply opacity-90" />
                                     </div>
                                     <div className="space-y-4">
                                         <p className="text-sm text-[#5C4D44] leading-relaxed">
@@ -79,7 +83,7 @@ export default function SourdoughPage() {
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                     <div className="space-y-6">
                                         <div className="relative aspect-square bg-[#FAF8F5] rounded-3xl border border-[#EBE5DB] overflow-hidden">
-                                            <Image src="/sourdough_cutting.png" alt="Cutting bread" fill className="object-contain p-4 mix-blend-multiply opacity-80" />
+                                            <Image src="/sourdough_cutting.png" alt="Cutting bread" fill className="object-contain p-4 mix-blend-multiply opacity-90" />
                                         </div>
                                         <div className="flex gap-4">
                                             <span className="w-8 h-8 rounded-full bg-[#3B2B23] text-white flex items-center justify-center text-xs font-black">1</span>
@@ -101,26 +105,26 @@ export default function SourdoughPage() {
                             </div>
 
                             {/* Reheating Section */}
-                            <div className="bg-[#3B2B23] p-12 rounded-[50px] text-white relative overflow-hidden group shadow-xl">
+                            <div className="bg-[#3B2B23] p-8 md:p-12 rounded-[50px] text-white relative overflow-hidden group shadow-xl">
                                 <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-bl-full pointer-events-none group-hover:scale-110 transition-transform"></div>
-                                <h3 className="font-serif text-4xl text-white mb-8 leading-tight">Quer a sensação de <br />pão saindo do forno?</h3>
+                                <h3 className="font-serif text-4xl text-white mb-10 leading-tight">Quer a sensação de <br />pão saindo do forno?</h3>
                                 
-                                <div className="space-y-8">
-                                    <div className="flex gap-10 items-center">
-                                        <div className="w-20 h-20 bg-white/10 rounded-2xl flex items-center justify-center p-2">
-                                            <Image src="/sourdough_spray.png" alt="Spray" width={60} height={60} className="object-contain opacity-70" />
+                                <div className="space-y-12">
+                                    <div className="flex flex-col md:flex-row gap-8 items-center text-center md:text-left">
+                                        <div className="w-32 h-32 bg-white/10 rounded-3xl flex items-center justify-center p-4">
+                                            <Image src="/sourdough_spray.png" alt="Spray" width={100} height={100} className="object-contain" />
                                         </div>
-                                        <p className="text-xs text-white/70 uppercase tracking-[0.2em] leading-relaxed">
+                                        <p className="text-xs text-white/70 uppercase tracking-[0.2em] leading-relaxed flex-1">
                                             <span className="text-[#D6C1AE] font-black block mb-2 underline">PASSO 01</span>
                                             Borrife ou respingue umas gotinhas de água filtrada nas fatias.
                                         </p>
                                     </div>
 
-                                    <div className="flex gap-10 items-center">
-                                        <div className="w-20 h-20 bg-white/10 rounded-2xl flex items-center justify-center p-2">
-                                            <Image src="/sourdough_heating.png" alt="Heating" width={60} height={60} className="object-contain opacity-70" />
+                                    <div className="flex flex-col md:flex-row gap-8 items-center text-center md:text-left">
+                                        <div className="w-32 h-32 bg-white/10 rounded-3xl flex items-center justify-center p-4">
+                                            <Image src="/sourdough_heating.png" alt="Heating" width={100} height={100} className="object-contain" />
                                         </div>
-                                        <p className="text-xs text-white/70 uppercase tracking-[0.2em] leading-relaxed">
+                                        <p className="text-xs text-white/70 uppercase tracking-[0.2em] leading-relaxed flex-1">
                                             <span className="text-[#D6C1AE] font-black block mb-2 underline">PASSO 02</span>
                                             Aqueça no forno, airfryer, torredeira ou frigideira bem quente.
                                         </p>
@@ -138,12 +142,12 @@ export default function SourdoughPage() {
                         </div>
                     </div>
                 </div>
-                
-                <footer className="mt-20 flex flex-col items-center text-center pb-20">
-                    <div className="w-[1px] h-20 bg-[#D6C1AE] mb-8"></div>
-                    <p className="font-serif text-2xl text-[#1E1A17] italic">O resultado é um pão quentinho que você vai continuar amando!</p>
-                </footer>
             </div>
+
+            <Footer />
+            <FloatingWhatsApp />
+            <FloatingCart />
         </main>
     );
 }
+
