@@ -30,6 +30,7 @@ model Batch {
   totalCapacity   Int      // Capacidade total do forno para essa fornada
   soldQuantity    Int      @default(0) // Quantos já foram vendidos / encomendados
   
+  isImmediateSale Boolean  @default(false) // Indica se é uma venda imediata (queima de estoque)
   orderItems      OrderItem[]
 
   createdAt       DateTime @default(now())

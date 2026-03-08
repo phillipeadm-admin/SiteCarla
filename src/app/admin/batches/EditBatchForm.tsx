@@ -11,7 +11,8 @@ interface Batch {
     productId: string;
     product: {
         name: string;
-    }
+    },
+    isImmediateSale: boolean;
 }
 
 export default function EditBatchForm({ batch }: { batch: Batch }) {
@@ -93,6 +94,19 @@ export default function EditBatchForm({ batch }: { batch: Batch }) {
                                     <label className="text-[10px] font-bold text-[#8B6E5B] uppercase px-1 mb-2 block tracking-widest">Total de Pães</label>
                                     <input name="totalCapacity" type="number" defaultValue={batch.totalCapacity} required className="w-full bg-[#FAF5EF] border-0 rounded-2xl px-6 py-4 text-sm focus:ring-2 focus:ring-[#3B2B23]" />
                                 </div>
+                            </div>
+
+                            <div className="flex items-center gap-3 bg-[#FAF5EF] p-4 rounded-2xl cursor-pointer hover:bg-[#F3EBE1] transition-colors">
+                                <input 
+                                    type="checkbox" 
+                                    name="isImmediateSale" 
+                                    id={`edit-isImmediateSale-${batch.id}`}
+                                    defaultChecked={batch.isImmediateSale}
+                                    className="w-5 h-5 accent-[#E66A46] cursor-pointer"
+                                />
+                                <label htmlFor={`edit-isImmediateSale-${batch.id}`} className="text-sm font-bold text-[#3B2B23] cursor-pointer">
+                                    Venda Imediata (Queima de Estoque)
+                                </label>
                             </div>
 
                             <button

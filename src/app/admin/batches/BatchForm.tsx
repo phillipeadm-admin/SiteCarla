@@ -74,6 +74,18 @@ export default function BatchForm({ products }: { products: Product[] }) {
                                 </div>
                             </div>
 
+                            <div className="flex items-center gap-3 bg-[#FAF5EF] p-4 rounded-2xl cursor-pointer hover:bg-[#F3EBE1] transition-colors">
+                                <input 
+                                    type="checkbox" 
+                                    name="isImmediateSale" 
+                                    id="isImmediateSale"
+                                    className="w-5 h-5 accent-[#E66A46] cursor-pointer"
+                                />
+                                <label htmlFor="isImmediateSale" className="text-sm font-bold text-[#3B2B23] cursor-pointer">
+                                    Venda Imediata (Queima de Estoque)
+                                </label>
+                            </div>
+
                             <button
                                 type="submit"
                                 disabled={isSubmitting}

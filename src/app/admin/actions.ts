@@ -80,6 +80,8 @@ export async function createBatch(formData: FormData) {
     const availableDate = new Date(formData.get('availableDate') as string);
     const totalCapacity = parseInt(formData.get('totalCapacity') as string);
 
+    const isImmediateSale = formData.get('isImmediateSale') === 'on';
+
     if (!productId || isNaN(totalCapacity)) {
         return { success: false, error: "Produto e capacidade são obrigatórios." };
     }
@@ -90,6 +92,7 @@ export async function createBatch(formData: FormData) {
                 productId,
                 availableDate,
                 totalCapacity,
+                isImmediateSale,
             }
         });
 
@@ -107,6 +110,8 @@ export async function updateBatch(formData: FormData) {
     const availableDate = new Date(formData.get('availableDate') as string);
     const totalCapacity = parseInt(formData.get('totalCapacity') as string);
 
+    const isImmediateSale = formData.get('isImmediateSale') === 'on';
+
     if (!id || isNaN(totalCapacity)) {
         return { success: false, error: "ID e capacidade são obrigatórios." };
     }
@@ -117,6 +122,7 @@ export async function updateBatch(formData: FormData) {
             data: {
                 availableDate,
                 totalCapacity,
+                isImmediateSale,
             }
         });
 
