@@ -2,21 +2,21 @@
 
 import { useState } from 'react';
 import { Trash2, Loader2 } from 'lucide-react';
-import { deleteProduct } from '../actions';
+import { deleteBatch } from '../actions';
 import ElegantConfirmModal from '@/components/ElegantConfirmModal';
 
-export default function DeleteProductButton({ id, name }: { id: string; name: string }) {
+export default function DeleteBatchButton({ id, dateStr }: { id: string; dateStr: string }) {
     const [isDeleting, setIsDeleting] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [errorMsg, setErrorMsg] = useState('');
 
     async function handleDelete() {
         setIsDeleting(true);
-        const result = await deleteProduct(id);
+        const result = await deleteBatch(id);
         setIsDeleting(false);
 
         if (!result.success) {
-            setErrorMsg(result.error || "Erro ao excluir produto. Verifique se existem fornadas vinculadas.");
+            setErrorMsg(result.error || "Erro ao excluir fornada. Verifique se existem pedidos vinculados.");
             setShowModal(true);
         } else {
             setShowModal(false);
@@ -31,8 +31,8 @@ export default function DeleteProductButton({ id, name }: { id: string; name: st
                     setShowModal(true);
                 }}
                 disabled={isDeleting}
-                className="p-2 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all disabled:opacity-50"
-                title="Excluir Produto"
+                className="w-10 h-10 bg-white text-red-500 rounded-2xl flex items-center justify-center border border-[#EBE6DF] hover:bg-red-50 transition-all shadow-sm flex-shrink-0 disabled:opacity-50"
+                title="Excluir Fornada"
             >
                 {isDeleting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
             </button>
@@ -53,13 +53,13 @@ export default function DeleteProductButton({ id, name }: { id: string; name: st
                     isOpen={showModal}
                     onClose={() => setShowModal(false)}
                     onConfirm={handleDelete}
-                    title="Excluir Produto?"
-                    description={`Você tem certeza que deseja remover "${name}" da sua vitrine? Esta ação é irreversível.`}
+                    title="Excluir Fornada?"
+                    description={`Tem certeza que deseja remover a fornada do dia ${dateStr}? Esta ação é irreversível.`}
                     confirmText="Sim, Excluir"
-                    cancelText="Manter Produto"
+                    cancelText="Cancelar"
+                    isDestructive={true}
                 />
             )}
         </>
     );
 }
-

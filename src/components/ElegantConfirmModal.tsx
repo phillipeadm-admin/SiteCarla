@@ -11,6 +11,7 @@ interface ElegantConfirmModalProps {
     confirmText?: string;
     cancelText?: string;
     isDestructive?: boolean;
+    isAlert?: boolean;
 }
 
 export default function ElegantConfirmModal({
@@ -21,7 +22,8 @@ export default function ElegantConfirmModal({
     description,
     confirmText = "Confirmar",
     cancelText = "Cancelar",
-    isDestructive = true
+    isDestructive = true,
+    isAlert = false
 }: ElegantConfirmModalProps) {
     if (!isOpen) return null;
 
@@ -41,14 +43,14 @@ export default function ElegantConfirmModal({
                     </div>
 
                     <h2 className="font-serif text-3xl font-black text-[#3B2B23] mb-4 leading-tight">{title}</h2>
-                    <p className="text-[#8B6E5B] text-sm font-medium leading-relaxed mb-10 uppercase tracking-widest">
+                    <p className="text-[#8B6E5B] text-sm font-medium leading-relaxed mb-10 uppercase tracking-widest whitespace-pre-wrap">
                         {description}
                     </p>
 
                     <div className="flex flex-col w-full gap-3">
                         <button
                             onClick={() => {
-                                onConfirm();
+                                if (!isAlert) onConfirm();
                                 onClose();
                             }}
                             className={`w-full py-5 rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-lg transition-all ${
@@ -59,12 +61,14 @@ export default function ElegantConfirmModal({
                         >
                             {confirmText}
                         </button>
-                        <button
-                            onClick={onClose}
-                            className="w-full py-5 rounded-2xl font-black text-xs uppercase tracking-[0.2em] text-[#8B6E5B] hover:bg-[#FAF5EF] transition-all"
-                        >
-                            {cancelText}
-                        </button>
+                        {!isAlert && (
+                            <button
+                                onClick={onClose}
+                                className="w-full py-5 rounded-2xl font-black text-xs uppercase tracking-[0.2em] text-[#8B6E5B] hover:bg-[#FAF5EF] transition-all"
+                            >
+                                {cancelText}
+                            </button>
+                        )}
                     </div>
                 </div>
             </div>

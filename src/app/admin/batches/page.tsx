@@ -1,7 +1,8 @@
 import prisma from "@/lib/prisma";
-import { Package, Clock, Calendar, Hash } from "lucide-react";
+import { Package, Clock, Calendar, Hash, ShoppingCart } from "lucide-react";
 import BatchForm from "./BatchForm";
 import EditBatchForm from "./EditBatchForm";
+import DeleteBatchButton from "./DeleteBatchButton";
 
 export const revalidate = 0;
 
@@ -9,7 +10,14 @@ export default async function AdminBatches() {
     const products = await prisma.product.findMany({
         include: {
             batches: {
-                orderBy: { availableDate: 'asc' }
+                orderBy: { availableDate: 'asc' },
+                include: {
+                    orderItems: {
+                        where: {
+                            order: { status: { not: "PENDING" } }
+                        }
+                    }
+                }
             }
         },
         orderBy: { name: 'asc' }
@@ -56,46 +64,65 @@ export default async function AdminBatches() {
                                     </div>
 
                                     {/* Lista de Fornadas (Caixinhas Pequenas ao lado) */}
-                                    <div className="flex-1 w-full max-h-[300px] overflow-y-auto pr-2 space-y-3 custom-scrollbar">
+                                    <div className="flex-1 w-full max-h-[400px] overflow-y-auto pr-2 space-y-3 custom-scrollbar">
                                         <div className="text-[10px] font-bold text-[#8B6E5B] uppercase tracking-widest mb-4 flex items-center gap-2">
                                             <div className="w-1 h-3 bg-[#E66A46] rounded-full" /> Detalhes das Fornadas
                                         </div>
                                         <div className="flex flex-col gap-3">
-                                            {product.batches.map((batch) => (
-                                                <div key={batch.id} className="bg-[#FAF5EF]/60 hover:bg-[#FAF5EF] transition-all rounded-2xl p-4 border border-[#EBE6DF] flex items-center justify-between group">
-                                                    <div className="flex items-center gap-4">
-                                                        <div className="bg-white p-2 rounded-lg border border-[#EBE6DF]">
-                                                            <Calendar className="w-4 h-4 text-[#E66A46]" />
-                                                        </div>
-                                                        <div>
-                                                            <p className="text-[11px] font-black text-[#3B2B23] uppercase">
-                                                                {new Date(batch.availableDate).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })}
-                                                            </p>
-                                                            <p className="text-[10px] text-[#8B6E5B] font-bold flex items-center gap-1">
-                                                                <Clock className="w-3 h-3" /> {new Date(batch.availableDate).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
-                                                            </p>
-                                                        </div>
-                                                    </div>
+                                            {product.batches.map((batch) => {
+                                                const paidQuantity = batch.orderItems.reduce((acc, item) => acc + item.quantity, 0);
+                                                // As reservas totais são soldQuantity. As pagas são orderItems.
+                                                // O restante está em PENDING / Carrinhos ativos.
+                                                const inCarts = Math.max(0, batch.soldQuantity - paidQuantity);
 
-                                                    <div className="flex items-center gap-8">
-                                                        <div className="text-right">
-                                                            <span className="block text-[8px] font-bold text-[#8B6E5B] uppercase tracking-wider">Disponível</span>
-                                                            <span className="text-sm font-black text-[#3B2B23]">{batch.totalCapacity - batch.soldQuantity}</span>
+                                                return (
+                                                    <div key={batch.id} className="bg-[#FAF5EF]/60 hover:bg-[#FAF5EF] transition-all rounded-2xl p-4 border border-[#EBE6DF] flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                                                        <div className="flex items-center gap-4">
+                                                            <div className="bg-white p-2 rounded-lg border border-[#EBE6DF]">
+                                                                <Calendar className="w-4 h-4 text-[#E66A46]" />
+                                                            </div>
+                                                            <div>
+                                                                <p className="text-[11px] font-black text-[#3B2B23] uppercase">
+                                                                    {new Date(batch.availableDate).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })}
+                                                                </p>
+                                                                <p className="text-[10px] text-[#8B6E5B] font-bold flex items-center gap-1">
+                                                                    <Clock className="w-3 h-3" /> {new Date(batch.availableDate).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
+                                                                </p>
+                                                            </div>
                                                         </div>
-                                                        {batch.observation && (
-                                                            <div className="h-8 w-[1px] bg-[#EBE6DF] hidden md:block" />
-                                                        )}
-                                                        {batch.observation && (
-                                                            <p className="text-[10px] text-[#8B6E5B] italic max-w-[120px] line-clamp-1 hidden md:block" title={batch.observation}>
-                                                                "{batch.observation}"
-                                                            </p>
-                                                        )}
-                                                        <div className="opacity-0 group-hover:opacity-100 transition-opacity">
-                                                            <EditBatchForm batch={{ ...batch, product: { name: product.name } }} />
+
+                                                        <div className="flex items-center gap-6">
+                                                            <div className="text-right">
+                                                                <span className="block text-[8px] font-bold text-[#8B6E5B] uppercase tracking-wider">Disponível</span>
+                                                                <span className="text-sm font-black text-[#3B2B23]">{batch.totalCapacity - batch.soldQuantity}</span>
+                                                            </div>
+                                                            <div className="h-8 w-[1px] bg-[#EBE6DF]" />
+                                                            <div className="text-right flex items-center gap-2">
+                                                                <div className="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center text-orange-600">
+                                                                    <ShoppingCart className="w-4 h-4" />
+                                                                </div>
+                                                                <div>
+                                                                    <span className="block text-[8px] font-bold text-orange-600 uppercase tracking-wider">Em Carrinhos</span>
+                                                                    <span className="text-sm font-black text-orange-600">{inCarts} unid.</span>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            {batch.observation && (
+                                                                <>
+                                                                    <div className="h-8 w-[1px] bg-[#EBE6DF] hidden md:block" />
+                                                                    <p className="text-[10px] text-[#8B6E5B] italic max-w-[120px] line-clamp-1 hidden md:block" title={batch.observation}>
+                                                                        "{batch.observation}"
+                                                                    </p>
+                                                                </>
+                                                            )}
+                                                            <div className="flex items-center gap-2 ml-4">
+                                                                <EditBatchForm batch={{ ...batch, product: { name: product.name } }} />
+                                                                <DeleteBatchButton id={batch.id} dateStr={new Date(batch.availableDate).toLocaleString('pt-BR')} />
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            ))}
+                                                )
+                                            })}
                                         </div>
                                     </div>
                                 </div>

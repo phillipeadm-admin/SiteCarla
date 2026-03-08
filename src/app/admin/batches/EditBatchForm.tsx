@@ -46,12 +46,12 @@ export default function EditBatchForm({ batch }: { batch: Batch }) {
     const dateString = formattedDate.toISOString().slice(0, 16);
 
     return (
-        <div className="flex gap-2 mt-4">
+        <>
             <button
                 onClick={() => setIsOpen(true)}
-                className="w-full bg-white text-[#3B2B23] py-3 rounded-2xl text-[11px] font-black uppercase tracking-widest border border-[#EBE6DF] hover:bg-[#FAF5EF] transition-all flex justify-center items-center gap-2 shadow-sm"
+                className="bg-white text-[#3B2B23] px-6 py-3 rounded-2xl text-[11px] font-black uppercase tracking-widest border border-[#EBE6DF] hover:bg-[#FAF5EF] transition-all flex justify-center items-center gap-2 shadow-sm whitespace-nowrap"
             >
-                <Pencil className="w-3.5 h-3.5" /> Editar Fornada / Add Estoque
+                <Pencil className="w-3.5 h-3.5" /> Editar Fornada
             </button>
 
             {isOpen && (
@@ -128,6 +128,6 @@ export default function EditBatchForm({ batch }: { batch: Batch }) {
                     </div>
                 </div>
             )}
-        </div>
+        </>
     );
 }

@@ -22,11 +22,7 @@ export default function SourdoughPage() {
             <div className="flex-1 pt-32 md:pt-40 pb-24 px-4 md:px-10 max-w-7xl mx-auto w-full">
                 {/* Intro Section */}
                 <div className="text-center mb-16 max-w-3xl mx-auto">
-                    <span className="text-[#8B6E5B] font-bold text-[10px] uppercase tracking-[0.4em] mb-4 block">Manifesto de Qualidade</span>
-                    <h1 className="font-serif text-[45px] md:text-[64px] lg:text-[80px] font-medium text-[#1E1A17] leading-[1.1] mb-8">
-                        O Segredo do <span className="italic">Sourdough</span>
-                    </h1>
-                    <div className="w-16 h-[1px] bg-[#D6C1AE] mx-auto opacity-60"></div>
+                    <span className="text-[#8B6E5B] font-bold text-sm md:text-base uppercase tracking-[0.4em] block">Manifesto de Qualidade</span>
                 </div>
 
                 <div className="bg-white rounded-[60px] shadow-sm border border-[#EBE5DB] overflow-hidden">
@@ -84,7 +80,7 @@ export default function SourdoughPage() {
                                     {/* Step 1 */}
                                     <div className="space-y-6 group">
                                         <div className="relative aspect-square bg-[#FAF8F5] rounded-[40px] border border-[#EBE5DB] overflow-hidden transition-all group-hover:shadow-md">
-                                            <Image src="/sourdough_cutting.png" alt="Corte ao meio" fill className="object-contain p-6 mix-blend-multiply opacity-90 group-hover:scale-105 transition-transform duration-500" />
+                                            <Image src="/sourdough_cutting.png" alt="Corte ao meio" fill className="object-contain p-2 mix-blend-multiply opacity-90 group-hover:scale-105 transition-transform duration-500" />
                                         </div>
                                         <div className="flex gap-4">
                                             <span className="w-8 h-8 rounded-full bg-[#3B2B23] text-white flex-shrink-0 flex items-center justify-center text-xs font-black shadow-sm">1</span>
@@ -95,7 +91,7 @@ export default function SourdoughPage() {
                                     {/* Step 2 */}
                                     <div className="space-y-6 group md:translate-y-6">
                                         <div className="relative aspect-square bg-[#FAF8F5] rounded-[40px] border border-[#EBE5DB] overflow-hidden transition-all group-hover:shadow-md">
-                                            <Image src="/sourdough_slicing.png" alt="Fatie" fill className="object-contain p-6 mix-blend-multiply opacity-90 group-hover:scale-105 transition-transform duration-500" />
+                                            <Image src="/sourdough_slicing.png" alt="Fatie" fill className="object-contain p-2 mix-blend-multiply opacity-90 group-hover:scale-105 transition-transform duration-500" />
                                         </div>
                                         <div className="flex gap-4">
                                             <span className="w-8 h-8 rounded-full bg-[#3B2B23] text-white flex-shrink-0 flex items-center justify-center text-xs font-black shadow-sm">2</span>
@@ -106,7 +102,7 @@ export default function SourdoughPage() {
                                     {/* Step 3 */}
                                     <div className="space-y-6 group">
                                         <div className="relative aspect-square bg-[#FAF8F5] rounded-[40px] border border-[#EBE5DB] overflow-hidden transition-all group-hover:shadow-md">
-                                            <Image src="/sourdough_storing.png" alt="Armazene" fill className="object-contain p-6 mix-blend-multiply opacity-90 group-hover:scale-105 transition-transform duration-500" />
+                                            <Image src="/sourdough_storing.png" alt="Armazene" fill className="object-contain p-2 mix-blend-multiply opacity-90 group-hover:scale-105 transition-transform duration-500" />
                                         </div>
                                         <div className="flex gap-4">
                                             <span className="w-8 h-8 rounded-full bg-[#3B2B23] text-white flex-shrink-0 flex items-center justify-center text-xs font-black shadow-sm">3</span>
