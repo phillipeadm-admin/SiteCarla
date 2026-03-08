@@ -76,7 +76,7 @@ export default async function AdminBatches() {
                                                 const inCarts = Math.max(0, batch.soldQuantity - paidQuantity);
 
                                                 return (
-                                                    <div key={batch.id} className="bg-[#FAF5EF]/60 hover:bg-[#FAF5EF] transition-all rounded-2xl p-4 border border-[#EBE6DF] flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                                                    <div key={batch.id} className="bg-[#FAF5EF]/60 hover:bg-[#FAF5EF] transition-all rounded-2xl p-4 md:p-5 border border-[#EBE6DF] flex flex-col xl:flex-row items-start xl:items-center justify-between gap-4 md:gap-6">
                                                         <div className="flex items-center gap-4">
                                                             <div className="bg-white p-2 rounded-lg border border-[#EBE6DF]">
                                                                 <Calendar className="w-4 h-4 text-[#E66A46]" />
@@ -91,12 +91,12 @@ export default async function AdminBatches() {
                                                             </div>
                                                         </div>
 
-                                                        <div className="flex items-center gap-6">
-                                                            <div className="text-right">
+                                                        <div className="flex flex-wrap xl:flex-nowrap items-center gap-4 xl:gap-6 w-full xl:w-auto mt-4 xl:mt-0">
+                                                            <div className="text-left xl:text-right">
                                                                 <span className="block text-[8px] font-bold text-[#8B6E5B] uppercase tracking-wider">Disponível</span>
                                                                 <span className="text-sm font-black text-[#3B2B23]">{batch.totalCapacity - batch.soldQuantity}</span>
                                                             </div>
-                                                            <div className="h-8 w-[1px] bg-[#EBE6DF]" />
+                                                            <div className="h-8 w-[1px] bg-[#EBE6DF] hidden xl:block" />
                                                             <div className="text-right flex items-center gap-2">
                                                                 <div className="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center text-orange-600">
                                                                     <ShoppingCart className="w-4 h-4" />
@@ -115,7 +115,7 @@ export default async function AdminBatches() {
                                                                     </p>
                                                                 </>
                                                             )}
-                                                            <div className="flex items-center gap-2 ml-4">
+                                                            <div className="flex items-center gap-2 ml-auto xl:ml-4 w-full xl:w-auto justify-end">
                                                                 <EditBatchForm batch={{ ...batch, product: { name: product.name } }} />
                                                                 <DeleteBatchButton id={batch.id} dateStr={new Date(batch.availableDate).toLocaleString('pt-BR')} />
                                                             </div>

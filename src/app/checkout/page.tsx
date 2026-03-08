@@ -20,6 +20,7 @@ export default function CheckoutPage() {
     const [city, setCity] = useState('');
     const [state, setState] = useState('');
     const [isLoadingZip, setIsLoadingZip] = useState(false);
+    const [isFetchingLocation, setIsFetchingLocation] = useState(false);
     
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
@@ -49,6 +50,47 @@ export default function CheckoutPage() {
                 setIsLoadingZip(false);
             }
         }
+    };
+
+    const handleGetLocation = () => {
+        if (!navigator.geolocation) {
+            alert('Geolocalização não é suportada pelo seu navegador.');
+            return;
+        }
+
+        setIsFetchingLocation(true);
+        navigator.geolocation.getCurrentPosition(
+            async (position) => {
+                try {
+                    const { latitude, longitude } = position.coords;
+                    const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`);
+                    const data = await response.json();
+                    
+                    if (data && data.address) {
+                        setAddress(data.address.road || '');
+                        setNeighborhood(data.address.suburb || data.address.neighbourhood || '');
+                        setCity(data.address.city || data.address.town || data.address.village || '');
+                        setState(data.address.state || '');
+                        
+                        if (data.address.postcode) {
+                            setZipCode(data.address.postcode.replace(/\D/g, ''));
+                        }
+                    } else {
+                        alert('Não foi possível encontrar o endereço para esta localização.');
+                    }
+                } catch (error) {
+                    console.error("Erro ao buscar localização:", error);
+                    alert('Erro ao buscar endereço da localização.');
+                } finally {
+                    setIsFetchingLocation(false);
+                }
+            },
+            (error) => {
+                console.error("Erro de geolocalização:", error);
+                alert('Não foi possível acessar sua localização. Verifique as permissões do navegador.');
+                setIsFetchingLocation(false);
+            }
+        );
     };
 
     const handlePayment = async () => {
@@ -215,6 +257,21 @@ export default function CheckoutPage() {
 
                         {deliveryType === 'ENTREGA' && (
                             <div className="space-y-6 animate-in slide-in-from-top-4 duration-300">
+                                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-[#F5F2EC] p-4 rounded-xl border border-[#E8E0D5]">
+                                    <h3 className="text-[11px] font-bold text-[#1E1A17] uppercase tracking-widest flex items-center gap-2">
+                                        <MapPin className="w-5 h-5 text-[#A89078]" />
+                                        Endereço de Entrega
+                                    </h3>
+                                    <button
+                                        onClick={handleGetLocation}
+                                        type="button"
+                                        disabled={isFetchingLocation}
+                                        className="w-full sm:w-auto flex items-center justify-center gap-2 bg-white hover:bg-[#1E1A17] hover:text-white text-[#1E1A17] px-5 py-3 border border-[#E8E0D5] rounded-xl text-[10px] font-black uppercase tracking-[0.2em] transition-all disabled:opacity-50 shadow-sm"
+                                    >
+                                        {isFetchingLocation ? <Loader2 className="w-4 h-4 animate-spin"/> : <MapPin className="w-4 h-4" />}
+                                        ENVIE SUA LOCALIZAÇÃO
+                                    </button>
+                                </div>
                                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                                     <div className="md:col-span-1 border-r border-[#F5F2EC]">
                                         <label className="text-[10px] font-bold text-[#A89078] uppercase tracking-widest mb-2 block">CEP</label>
