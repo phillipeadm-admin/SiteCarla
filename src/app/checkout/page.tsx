@@ -221,8 +221,8 @@ export default function CheckoutPage() {
                         <div className="space-y-8">
                             {items.map((item) => (
                                 <div key={item.id} className="flex gap-6 items-center">
-                                    <div className="relative w-24 h-24 bg-[#F5F2EC] flex-shrink-0">
-                                        <Image src={item.imageUrl} alt={item.name} fill className="object-contain p-2" />
+                                    <div className="relative w-24 h-24 bg-[#F5F2EC] flex-shrink-0 rounded-xl overflow-hidden">
+                                        <Image src={item.imageUrl} alt={item.name} fill className="object-cover" />
                                     </div>
                                     <div className="flex-1">
                                         <h3 className="font-medium text-[#1E1A17] text-lg">{item.name}</h3>

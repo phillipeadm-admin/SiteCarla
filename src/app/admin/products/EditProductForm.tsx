@@ -83,15 +83,15 @@ export default function EditProductForm({ product }: { product: Product }) {
 
                             <div className="grid grid-cols-3 gap-4">
                                 <div>
-                                    <label className="text-[10px] font-bold text-[#8B6E5B] uppercase px-1 mb-2 block tracking-widest">P (Padrão)</label>
+                                    <label className="text-[10px] font-bold text-[#8B6E5B] uppercase px-1 mb-2 block tracking-widest">Preço</label>
                                     <input name="price" type="number" step="0.01" defaultValue={product.price} required className="w-full bg-[#FAF5EF] border-0 rounded-2xl px-6 py-4 text-sm focus:ring-2 focus:ring-[#3B2B23]" />
                                 </div>
                                 <div>
-                                    <label className="text-[10px] font-bold text-[#8B6E5B] uppercase px-1 mb-2 block tracking-widest">M (Médio)</label>
+                                    <label className="text-[10px] font-bold text-[#8B6E5B] uppercase px-1 mb-2 block tracking-widest">Preço M</label>
                                     <input name="priceM" type="number" step="0.01" defaultValue={product.priceM || ''} className="w-full bg-[#FAF5EF] border-0 rounded-2xl px-6 py-4 text-sm focus:ring-2 focus:ring-[#3B2B23]" />
                                 </div>
                                 <div>
-                                    <label className="text-[10px] font-bold text-[#8B6E5B] uppercase px-1 mb-2 block tracking-widest">G (Grande)</label>
+                                    <label className="text-[10px] font-bold text-[#8B6E5B] uppercase px-1 mb-2 block tracking-widest">Preço G</label>
                                     <input name="priceG" type="number" step="0.01" defaultValue={product.priceG || ''} className="w-full bg-[#FAF5EF] border-0 rounded-2xl px-6 py-4 text-sm focus:ring-2 focus:ring-[#3B2B23]" />
                                 </div>
                             </div>
