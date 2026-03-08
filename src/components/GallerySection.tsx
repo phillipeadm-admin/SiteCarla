@@ -11,9 +11,7 @@ export default function GallerySection({ images }: { images: GalleryImage[] }) {
     return (
         <section className="w-full mt-32 mb-40 px-6 md:px-12">
             <div className="flex flex-col items-center text-center mb-20">
-                <span className="text-[#8B6E5B] font-bold text-[10px] uppercase tracking-[0.4em] mb-4">Galeria de Inspiração</span>
-                <h2 className="font-serif text-4xl md:text-6xl text-[#1E1A17] tracking-tight">Nossos Produtos</h2>
-                <div className="w-16 h-[1px] bg-[#D6C1AE] mt-6 opacity-60"></div>
+                <span className="text-[#8B6E5B] font-bold text-[10px] uppercase tracking-[0.4em]">Galeria de Inspiração</span>
             </div>
 
             <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 md:gap-4">
