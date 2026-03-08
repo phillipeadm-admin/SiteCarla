@@ -14,11 +14,11 @@ export default function GallerySection({ images }: { images: GalleryImage[] }) {
                 <span className="text-[#8B6E5B] font-bold text-[10px] uppercase tracking-[0.4em]">Galeria de Inspiração</span>
             </div>
 
-            <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 md:gap-4">
+            <div className="flex flex-wrap justify-center gap-4 md:gap-6 max-w-7xl mx-auto">
                 {images.map((image, index) => (
                     <div 
                         key={image.id} 
-                        className={`group relative overflow-hidden bg-white aspect-square rounded-[60px] md:rounded-[80px_20px_80px_20px] transition-all duration-700 hover:shadow-[0_40px_80px_rgba(59,43,35,0.15)] hover:-translate-y-4 hover:rotate-1 ${
+                        className={`group relative overflow-hidden bg-white aspect-square w-[calc(50%-16px)] sm:w-[calc(33.333%-16px)] md:w-[calc(25%-24px)] lg:w-[calc(16.666%-24px)] rounded-[60px] md:rounded-[80px_20px_80px_20px] transition-all duration-700 hover:shadow-[0_40px_80px_rgba(59,43,35,0.15)] hover:-translate-y-4 hover:rotate-1 ${
                             index % 2 !== 0 ? 'md:translate-y-8' : ''
                         }`}
                     >

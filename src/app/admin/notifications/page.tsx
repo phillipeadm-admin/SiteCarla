@@ -3,6 +3,7 @@ import { markNotificationAsRead } from "../actions";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import MarkReadButton from "./MarkReadButton";
+import WhatsAppButton from "./WhatsAppButton";
 
 export const revalidate = 0;
 
@@ -56,16 +57,12 @@ export default async function AdminNotifications() {
                                                 <MarkReadButton id={notif.id} isRead={notif.notified} />
                                             </div>
                                         )}
-                                        <a
-                                            href={`https://wa.me/55${notif.customerPhone.replace(/\D/g, '')}?text=Olá ${notif.customerName}, o ${notif.product.name} que você pediu para ser avisado já está disponível!`}
-                                            target="_blank"
-                                            onClick={async () => {
-                                                await markNotificationAsRead(notif.id);
-                                            }}
-                                            className="text-[10px] font-bold uppercase bg-[#25D366] text-white px-4 py-2 rounded-xl hover:bg-[#128C7E] transition-colors"
-                                        >
-                                            Chamar no WhatsApp
-                                        </a>
+                                        <WhatsAppButton 
+                                            id={notif.id}
+                                            customerPhone={notif.customerPhone}
+                                            customerName={notif.customerName}
+                                            productName={notif.product.name}
+                                        />
                                     </div>
                                 </td>
                             </tr>
