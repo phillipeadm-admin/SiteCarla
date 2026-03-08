@@ -84,7 +84,7 @@ export default function SourdoughPage() {
                                         </div>
                                         <div className="flex gap-4">
                                             <span className="w-8 h-8 rounded-full bg-[#3B2B23] text-white flex-shrink-0 flex items-center justify-center text-xs font-black shadow-sm">1</span>
-                                            <p className="text-[11px] text-[#5C4D44] uppercase font-bold tracking-widest pt-1 leading-snug">Fatie todo o pão na espesuura desejada. Se preferir, corte o pão ao meio para facilitar o processo.</p>
+                                            <p className="text-[11px] text-[#5C4D44] uppercase font-bold tracking-widest pt-1 leading-snug">Fatie todo o pão na espessura desejada. Se preferir, corte o pão ao meio para facilitar o processo.</p>
                                         </div>
                                     </div>
 

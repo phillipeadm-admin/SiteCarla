@@ -98,12 +98,15 @@ export async function createBatch(formData: FormData) {
             }
         });
 
-        // O sistema deve avisar que há notificações pendentes?
-        // Na prática, o usuário quer que "desapareça do botão de notificação" ao avisar.
-        // Vou implementar a lógica de marcação automática ou aviso aqui se necessário,
-        // mas o pedido específico é que "envie mensagem automática no whatsapp".
-        // Como não há API, vamos garantir que ao entrar no admin/notifications após criar fornada,
-        // os clientes estejam lá com o botão pronto.
+        // Marcar todas as notificações pendentes para este produto como "notificadas"
+        // Isso faz com que elas desapareçam do balão de notificações/lista pendente
+        await prisma.availabilityNotification.updateMany({
+            where: {
+                productId,
+                notified: false
+            },
+            data: { notified: true }
+        });
 
         revalidatePath('/admin/batches');
         revalidatePath('/admin/notifications');
