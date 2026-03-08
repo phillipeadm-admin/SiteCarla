@@ -111,7 +111,7 @@ export default function ImageUpload({ onUpload, defaultValue }: ImageUploadProps
 
     return (
         <div className="space-y-4">
-            <div className="relative aspect-video w-full rounded-[32px] bg-[#FAF5EF] border-2 border-dashed border-[#EBE6DF] flex flex-col items-center justify-center overflow-hidden group hover:border-[#3B2B23] transition-all">
+            <div className="relative aspect-[4/3] max-w-[200px] mx-auto w-full rounded-[40px] md:rounded-[100px_30px_100px_30px] bg-[#FAF5EF] border-2 border-[#EBE6DF] flex flex-col items-center justify-center overflow-hidden group hover:border-[#3B2B23] transition-all shadow-sm">
                 {preview ? (
                     <>
                         <img src={preview} alt="Preview" className="w-full h-full object-cover" />
@@ -122,7 +122,7 @@ export default function ImageUpload({ onUpload, defaultValue }: ImageUploadProps
                 ) : (
                     <div className="flex flex-col items-center text-[#8B6E5B]">
                         <LucideImage className="w-10 h-10 mb-2 opacity-30" />
-                        <span className="text-[10px] font-black uppercase tracking-[0.2em]">Selecionar Foto</span>
+                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-center px-4">Selecionar<br/>Foto</span>
                     </div>
                 )}
 

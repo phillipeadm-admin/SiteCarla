@@ -1,20 +1,26 @@
 'use client';
 
 import { useCartStore } from '@/store/useCartStore';
-import { Trash2, Plus, Minus, ArrowLeft, Truck, Store, CheckCircle } from 'lucide-react';
+import { Trash2, Plus, Minus, ArrowLeft, Truck, Store, CheckCircle, MapPin, Search, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { createOrder } from './actions';
 import CartTimer from '@/components/CartTimer';
 
 export default function CheckoutPage() {
-    const { items, addItem, decreaseItem, removeItem, total, finishOrder } = useCartStore();
+    const { items, addItem, decreaseItem, removeItem, clearCart, total, finishOrder } = useCartStore();
     const [deliveryType, setDeliveryType] = useState<'RETIRADA' | 'ENTREGA'>('RETIRADA');
     const [customerName, setCustomerName] = useState('');
     const [customerPhone, setCustomerPhone] = useState('');
     const [zipCode, setZipCode] = useState('');
     const [address, setAddress] = useState('');
+    const [number, setNumber] = useState('');
+    const [neighborhood, setNeighborhood] = useState('');
+    const [city, setCity] = useState('');
+    const [state, setState] = useState('');
+    const [isLoadingZip, setIsLoadingZip] = useState(false);
+    
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
 
@@ -22,23 +28,50 @@ export default function CheckoutPage() {
     const freight = deliveryType === 'ENTREGA' ? 15.0 : 0.0;
     const finalTotal = subtotal + freight;
 
+    const handleZipCodeChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value.replace(/\D/g, '');
+        setZipCode(value);
+
+        if (value.length === 8) {
+            setIsLoadingZip(true);
+            try {
+                const response = await fetch(`https://viacep.com.br/ws/${value}/json/`);
+                const data = await response.json();
+                if (!data.erro) {
+                    setAddress(data.logradouro);
+                    setNeighborhood(data.bairro);
+                    setCity(data.localidade);
+                    setState(data.uf);
+                }
+            } catch (error) {
+                console.error("Erro ao buscar CEP:", error);
+            } finally {
+                setIsLoadingZip(false);
+            }
+        }
+    };
+
     const handlePayment = async () => {
         if (!customerName || !customerPhone) {
             alert('Por favor, preencha nome e telefone para identificação.');
             return;
         }
 
-        if (deliveryType === 'ENTREGA' && (!address || !zipCode)) {
+        if (deliveryType === 'ENTREGA' && (!address || !zipCode || !number || !neighborhood)) {
             alert('Por favor, preencha o endereço completo para entrega.');
             return;
         }
+
+        const fullAddress = deliveryType === 'ENTREGA' 
+            ? `${address}, ${number} - ${neighborhood}, ${city}/${state}` 
+            : 'Retirada na Padaria';
 
         setIsSubmitting(true);
         const result = await createOrder({
             customerName,
             customerPhone,
             deliveryType,
-            address,
+            address: fullAddress,
             zipCode,
             totalAmount: finalTotal,
             items: items.map(i => ({
@@ -56,24 +89,7 @@ export default function CheckoutPage() {
         }
     };
 
-    if (isSuccess) {
-        return (
-            <div className="min-h-screen bg-[#F5F2EC] flex flex-col items-center justify-center p-6 text-center">
-                <div className="bg-white p-12 shadow-sm border border-[#E8E0D5] flex flex-col items-center">
-                    <div className="bg-green-100 p-4 rounded-full mb-6">
-                        <CheckCircle className="w-12 h-12 text-green-600" />
-                    </div>
-                    <h2 className="font-serif text-3xl font-medium text-[#1E1A17] mb-4">Pedido Recebido!</h2>
-                    <p className="text-[#5C5552] mb-8 font-medium">Obrigado pela preferência, {customerName.split(' ')[0]}. <br /> Já enviamos os detalhes no seu WhatsApp.</p>
-                    <Link href="/" className="bg-[#D6C1AE] text-[#1E1A17] px-8 py-4 font-bold hover:bg-[#c9af96] transition-all uppercase tracking-widest text-xs">
-                        Voltar para a Padaria
-                    </Link>
-                </div>
-            </div>
-        );
-    }
-
-    if (items.length === 0) {
+    if (items.length === 0 && !isSuccess) {
         return (
             <div className="min-h-screen bg-[#F5F2EC] flex flex-col items-center justify-center p-6 text-center">
                 <div className="bg-white p-12 shadow-sm border border-[#E8E0D5]">
@@ -88,11 +104,8 @@ export default function CheckoutPage() {
     }
 
     const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        let value = e.target.value.replace(/\D/g, ''); // Remove non-digits
-
-        if (value.length > 11) value = value.slice(0, 11); // Limit to 11 digits
-
-        // Apply mask: (XX) XXXXX-XXXX
+        let value = e.target.value.replace(/\D/g, '');
+        if (value.length > 11) value = value.slice(0, 11);
         if (value.length > 10) {
             value = value.replace(/^(\d{2})(\d{5})(\d{4}).*/, '($1) $2-$3');
         } else if (value.length > 6) {
@@ -102,7 +115,6 @@ export default function CheckoutPage() {
         } else if (value.length > 0) {
             value = value.replace(/^(\d*)/, '($1');
         }
-
         setCustomerPhone(value);
     };
 
@@ -111,9 +123,19 @@ export default function CheckoutPage() {
             <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-12">
 
                 <div className="lg:col-span-2 space-y-8">
-                    <Link href="/#top" className="flex items-center gap-2 text-[#A89078] font-bold uppercase text-[10px] tracking-widest hover:text-[#1E1A17] transition-colors mb-4">
-                        <ArrowLeft className="w-4 h-4" /> Voltar
-                    </Link>
+                    <div className="flex justify-between items-center">
+                        <Link href="/#top" className="flex items-center gap-2 text-[#A89078] font-bold uppercase text-[10px] tracking-widest hover:text-[#1E1A17] transition-colors">
+                            <ArrowLeft className="w-4 h-4" /> Voltar
+                        </Link>
+                        <button 
+                            onClick={() => {
+                                if(confirm("Deseja realmente esvaziar seu cesto?")) clearCart();
+                            }}
+                            className="flex items-center gap-2 text-red-400 hover:text-red-600 font-bold uppercase text-[10px] tracking-widest transition-colors"
+                        >
+                            <Trash2 className="w-4 h-4" /> Esvaziar Carrinho
+                        </button>
+                    </div>
 
                     <div className="flex justify-between items-end mb-8">
                         <h1 className="font-serif text-[40px] md:text-[56px] font-medium text-[#1E1A17] leading-tight">Finalizar Pedido</h1>
@@ -122,7 +144,6 @@ export default function CheckoutPage() {
                         </div>
                     </div>
 
-                    {/* Identificação */}
                     <div className="bg-white p-8 shadow-sm border border-[#E8E0D5]">
                         <h2 className="font-serif text-2xl font-medium text-[#1E1A17] mb-6">Identificação</h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -187,36 +208,86 @@ export default function CheckoutPage() {
                                 <Truck className="w-6 h-6" />
                                 <div className="text-left">
                                     <span className="block font-bold text-[11px] uppercase tracking-widest">Entrega</span>
-                                    <span className="text-[10px] text-[#A89078] uppercase font-bold">Uber Flash - Cobrado à parte</span>
+                                    <span className="text-[10px] text-[#A89078] uppercase font-bold">Taxa Fixa R$ 15,00</span>
                                 </div>
                             </button>
                         </div>
 
                         {deliveryType === 'ENTREGA' && (
                             <div className="space-y-6 animate-in slide-in-from-top-4 duration-300">
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                    <div className="md:col-span-1">
+                                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                                    <div className="md:col-span-1 border-r border-[#F5F2EC]">
                                         <label className="text-[10px] font-bold text-[#A89078] uppercase tracking-widest mb-2 block">CEP</label>
-                                        <input
-                                            type="text"
-                                            value={zipCode}
-                                            onChange={(e) => setZipCode(e.target.value)}
-                                            placeholder="00000-000"
-                                            className="w-full bg-[#F5F2EC] border-0 px-4 py-4 text-sm focus:ring-1 focus:ring-[#A89078]"
-                                        />
+                                        <div className="relative">
+                                            <input
+                                                type="text"
+                                                value={zipCode}
+                                                onChange={handleZipCodeChange}
+                                                placeholder="00000000"
+                                                maxLength={8}
+                                                className="w-full bg-[#F5F2EC] border-0 px-4 py-4 text-sm focus:ring-1 focus:ring-[#A89078]"
+                                            />
+                                            {isLoadingZip && <div className="absolute right-3 top-4"><Loader2 className="w-4 h-4 animate-spin text-[#A89078]" /></div>}
+                                        </div>
                                     </div>
-                                    <div className="md:col-span-2">
-                                        <label className="text-[10px] font-bold text-[#A89078] uppercase tracking-widest mb-2 block">Rua, Número e Bairro</label>
+                                    <div className="md:col-span-3">
+                                        <label className="text-[10px] font-bold text-[#A89078] uppercase tracking-widest mb-2 block">Endereço (Rua/Logradouro)</label>
                                         <input
                                             type="text"
                                             value={address}
                                             onChange={(e) => setAddress(e.target.value)}
-                                            placeholder="Ex: Rua das Flores, 123 - Centro"
+                                            placeholder="Ex: Rua das Flores"
                                             className="w-full bg-[#F5F2EC] border-0 px-4 py-4 text-sm focus:ring-1 focus:ring-[#A89078]"
                                         />
                                     </div>
                                 </div>
-                                <p className="text-[10px] italic text-[#A89078]">O valor do frete será calculado e cobrado separadamente via WhatsApp.</p>
+
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    <div>
+                                        <label className="text-[10px] font-bold text-[#A89078] uppercase tracking-widest mb-2 block">Número</label>
+                                        <input
+                                            type="text"
+                                            value={number}
+                                            onChange={(e) => setNumber(e.target.value)}
+                                            placeholder="123"
+                                            className="w-full bg-[#F5F2EC] border-0 px-4 py-4 text-sm focus:ring-1 focus:ring-[#A89078]"
+                                        />
+                                    </div>
+                                    <div className="md:col-span-2">
+                                        <label className="text-[10px] font-bold text-[#A89078] uppercase tracking-widest mb-2 block">Bairro</label>
+                                        <input
+                                            type="text"
+                                            value={neighborhood}
+                                            onChange={(e) => setNeighborhood(e.target.value)}
+                                            placeholder="Centro"
+                                            className="w-full bg-[#F5F2EC] border-0 px-4 py-4 text-sm focus:ring-1 focus:ring-[#A89078]"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                                    <div className="md:col-span-3">
+                                        <label className="text-[10px] font-bold text-[#A89078] uppercase tracking-widest mb-2 block">Cidade</label>
+                                        <input
+                                            type="text"
+                                            value={city}
+                                            onChange={(e) => setCity(e.target.value)}
+                                            placeholder="São Paulo"
+                                            className="w-full bg-[#F5F2EC] border-0 px-4 py-4 text-sm focus:ring-1 focus:ring-[#A89078]"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="text-[10px] font-bold text-[#A89078] uppercase tracking-widest mb-2 block">Estado (UF)</label>
+                                        <input
+                                            type="text"
+                                            value={state}
+                                            onChange={(e) => setState(e.target.value)}
+                                            placeholder="SP"
+                                            maxLength={2}
+                                            className="w-full bg-[#F5F2EC] border-0 px-4 py-4 text-sm focus:ring-1 focus:ring-[#A89078] uppercase"
+                                        />
+                                    </div>
+                                </div>
                             </div>
                         )}
                     </div>
@@ -243,3 +314,4 @@ export default function CheckoutPage() {
         </div>
     );
 }
+
