@@ -16,6 +16,25 @@ export async function createOrder(data: {
     items: { batchId: string; quantity: number; pricePaid: number }[];
 }) {
     try {
+        // 1. Verificar disponibilidade real de estoque antes de qualquer coisa
+        for (const item of data.items) {
+            const batch = await prisma.batch.findUnique({
+                where: { id: item.batchId }
+            });
+
+            if (!batch) {
+                return { success: false, error: "Uma das fornadas selecionadas não existe mais." };
+            }
+
+            const available = batch.totalCapacity - batch.soldQuantity;
+            if (item.quantity > available) {
+                return { 
+                    success: false, 
+                    error: `Estoque insuficiente para uma das fornadas. Temos apenas ${available} unidades.` 
+                };
+            }
+        }
+
         const order = await prisma.order.create({
             data: {
                 customerName: data.customerName,
@@ -79,22 +98,6 @@ export async function createOrder(data: {
 
 export async function confirmOrderPayment(orderId: string) {
     try {
-        const order = await prisma.order.findUnique({
-            where: { id: orderId },
-            include: { 
-                items: { 
-                    include: { 
-                        batch: { 
-                            include: { product: true } 
-                        } 
-                    } 
-                } 
-            }
-        });
-
-        if (!order || order.status === "PAID") return { success: true };
-
-        // Atualizar status do pedido e estoque das fornadas usando lógica FIFO (First-In, First-Out)
         await prisma.$transaction(async (tx) => {
             // Verificar status novamente dentro da transação
             const currentOrder = await tx.order.findUnique({
@@ -104,45 +107,37 @@ export async function confirmOrderPayment(orderId: string) {
 
             if (!currentOrder || currentOrder.status === "PAID") return;
 
+            // 1. Atualizar status do pedido
             await tx.order.update({
                 where: { id: orderId },
                 data: { status: "PAID" }
             });
 
+            // 2. Dar baixa no estoque das fornadas específicas do pedido
             for (const item of currentOrder.items) {
-                const productId = item.batch.productId;
-                let quantityToDeduct = item.quantity;
-
-                // Buscar todas as fornadas deste produto que ainda têm estoque, 
-                // ordenadas pela data de disponibilidade (mais antiga primeiro)
-                const availableBatches = await tx.batch.findMany({
-                    where: { 
-                        productId: productId,
-                    },
-                    orderBy: { availableDate: 'asc' }
+                const batch = await tx.batch.findUnique({
+                    where: { id: item.batchId }
                 });
 
-                for (const batch of availableBatches) {
-                    const availableSpace = batch.totalCapacity - batch.soldQuantity;
-                    const amountFromThisBatch = Math.min(quantityToDeduct, availableSpace);
-
-                    if (amountFromThisBatch > 0) {
-                        await tx.batch.update({
-                            where: { id: batch.id },
-                            data: {
-                                soldQuantity: { increment: amountFromThisBatch }
-                            }
-                        });
-                        quantityToDeduct -= amountFromThisBatch;
-                    }
-
-                    if (quantityToDeduct === 0) break;
+                if (!batch) {
+                    console.error(`Batch ${item.batchId} não encontrado ao confirmar pagamento.`);
+                    continue;
                 }
 
-                // Se ainda sobrar quantidade, significa que o estoque global acabou.
-                // Não subtraímos mais para não deixar negativo, conforme solicitado.
+                const availableSpace = batch.totalCapacity - batch.soldQuantity;
+                const quantityToDeduct = Math.min(item.quantity, Math.max(0, availableSpace));
+
                 if (quantityToDeduct > 0) {
-                    console.warn(`Estoque insuficiente total para o produto no pedido ${orderId}. Restaram ${quantityToDeduct} sem baixa.`);
+                    await tx.batch.update({
+                        where: { id: batch.id },
+                        data: {
+                            soldQuantity: { increment: quantityToDeduct }
+                        }
+                    });
+                }
+                
+                if (item.quantity > quantityToDeduct) {
+                    console.warn(`Estoque insuficiente na fornada ${batch.id} para o pedido ${orderId}. Pedido pedia ${item.quantity}, foi possível abater apenas ${quantityToDeduct}.`);
                 }
             }
         });

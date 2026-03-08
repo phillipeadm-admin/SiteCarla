@@ -50,7 +50,7 @@ export default function EditBatchForm({ batch }: { batch: Batch }) {
             <button
                 onClick={() => setIsOpen(true)}
                 className="w-10 h-10 bg-white text-[#3B2B23] rounded-2xl flex items-center justify-center border border-[#EBE6DF] hover:bg-[#FAF5EF] transition-all shadow-sm flex-shrink-0"
-                title="Editar Fornada"
+                title="Editar"
             >
                 <Pencil className="w-4 h-4" />
             </button>

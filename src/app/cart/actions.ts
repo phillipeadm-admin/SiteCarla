@@ -1,20 +1,13 @@
 'use server';
 
 import prisma from "@/lib/prisma";
-import { revalidatePath } from "next/cache";
 
 export async function reserveStock(batchId: string, quantity: number) {
     try {
-        const batch = await prisma.batch.update({
-            where: { id: batchId },
-            data: {
-                soldQuantity: {
-                    increment: quantity
-                }
-            }
+        const batch = await prisma.batch.findUnique({
+            where: { id: batchId }
         });
-        revalidatePath('/');
-        revalidatePath('/nossos-paes');
+        if (!batch) return { success: false };
         return { success: true, remaining: batch.totalCapacity - batch.soldQuantity };
     } catch (error) {
         console.error("Reserve Error:", error);
@@ -23,41 +16,12 @@ export async function reserveStock(batchId: string, quantity: number) {
 }
 
 export async function releaseStock(batchId: string, quantity: number) {
-    try {
-        await prisma.batch.update({
-            where: { id: batchId },
-            data: {
-                soldQuantity: {
-                    decrement: quantity
-                }
-            }
-        });
-        revalidatePath('/');
-        revalidatePath('/nossos-paes');
-        return { success: true };
-    } catch (error) {
-        console.error("Release Error:", error);
-        return { success: false };
-    }
+    // Com a nova lógica de estoque apenas no pagamento, não precisamos liberar nada no banco.
+    // Mantemos a função para compatibilidade com o frontend.
+    return { success: true };
 }
 
 export async function releaseAllStock(items: { id: string; quantity: number }[]) {
-    try {
-        for (const item of items) {
-            await prisma.batch.update({
-                where: { id: item.id },
-                data: {
-                    soldQuantity: {
-                        decrement: item.quantity
-                    }
-                }
-            });
-        }
-        revalidatePath('/');
-        revalidatePath('/nossos-paes');
-        return { success: true };
-    } catch (error) {
-        console.error("Release All Error:", error);
-        return { success: false };
-    }
+    // Mesma lógica: não há reserva no banco para liberar.
+    return { success: true };
 }

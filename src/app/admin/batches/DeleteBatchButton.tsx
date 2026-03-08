@@ -32,7 +32,7 @@ export default function DeleteBatchButton({ id, dateStr }: { id: string; dateStr
                 }}
                 disabled={isDeleting}
                 className="w-10 h-10 bg-white text-red-500 rounded-2xl flex items-center justify-center border-2 border-red-100 hover:border-red-500 hover:bg-red-500 hover:text-white transition-all shadow-sm flex-shrink-0 disabled:opacity-50"
-                title="Excluir Fornada"
+                title="Excluir"
             >
                 {isDeleting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
             </button>

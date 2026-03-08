@@ -48,16 +48,6 @@ export const useCartStore = create<CartStore>()(
                     return;
                 }
 
-                // Reservar no Banco de Dados
-                const res = await reserveStock(newItem.id, 1);
-                if (!res.success) {
-                    useToastStore.getState().showToast({
-                        message: `Erro ao reservar produto. Tente novamente.`,
-                        type: 'error'
-                    });
-                    return;
-                }
-
                 // Atualizar Estado Local
                 const newExpiresAt = get().expiresAt || (Date.now() + RESERVATION_TIME);
 
@@ -76,15 +66,17 @@ export const useCartStore = create<CartStore>()(
                         items: [...currentItems, { ...newItem, quantity: 1 }]
                     });
                 }
+
+                useToastStore.getState().showToast({
+                    message: `${newItem.name} adicionado ao carrinho!`,
+                    type: 'success'
+                });
             },
             decreaseItem: async (id) => {
                 const currentItems = get().items;
                 const existingItem = currentItems.find((item) => item.id === id);
 
                 if (!existingItem) return;
-
-                // Liberar no Banco
-                await releaseStock(id, 1);
 
                 if (existingItem.quantity > 1) {
                     set({
@@ -101,10 +93,6 @@ export const useCartStore = create<CartStore>()(
                 }
             },
             removeItem: async (id) => {
-                const item = get().items.find(i => i.id === id);
-                if (item) {
-                    await releaseStock(id, item.quantity);
-                }
                 const remainingItems = get().items.filter((item) => item.id !== id);
                 set({
                     items: remainingItems,
@@ -112,10 +100,6 @@ export const useCartStore = create<CartStore>()(
                 });
             },
             clearCart: async () => {
-                const items = get().items;
-                if (items.length > 0) {
-                    await releaseAllStock(items.map(i => ({ id: i.id, quantity: i.quantity })));
-                }
                 set({ items: [], expiresAt: null });
             },
             finishOrder: () => set({ items: [], expiresAt: null }),
@@ -123,9 +107,8 @@ export const useCartStore = create<CartStore>()(
                 const { expiresAt, items } = get();
                 if (expiresAt && Date.now() > expiresAt) {
                     if (items.length > 0) {
-                        await releaseAllStock(items.map(i => ({ id: i.id, quantity: i.quantity })));
                         useToastStore.getState().showToast({
-                            message: "Sua reserva de 10 minutos expirou e os itens voltaram para o estoque.",
+                            message: "Sua sessão de compra expirou. Os itens foram removidos do carrinho.",
                             type: "warning",
                             duration: 6000
                         });
