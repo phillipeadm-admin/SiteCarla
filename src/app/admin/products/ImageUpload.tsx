@@ -80,9 +80,9 @@ export default function ImageUpload({ onUpload, defaultValue }: ImageUploadProps
 
             const formData = new FormData();
             formData.append('file', compressedFile);
-            formData.append('upload_preset', process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || 'ml_default');
+            formData.append('upload_preset', process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || 'grkisbpm');
 
-            const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || 'demo';
+            const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || 'dimwzozen';
             console.log('Enviando para Cloudinary (Cloud:', cloudName, ')');
             
             const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {

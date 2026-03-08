@@ -1,5 +1,7 @@
 import Image from "next/image";
 
+import SourdoughGuide from "./SourdoughGuide";
+
 interface GalleryImage {
     id: string;
     imageUrl: string;
@@ -12,7 +14,10 @@ export default function GallerySection({ images }: { images: GalleryImage[] }) {
         <section className="w-full mt-24 mb-32 px-4 md:px-10">
             <div className="flex flex-col items-center text-center mb-16">
                 <span className="text-[#8B6E5B] font-bold text-[10px] uppercase tracking-[0.3em] mb-4">Inspiração Diária</span>
-                <h2 className="font-serif text-4xl md:text-5xl text-[#1E1A17] mb-2 tracking-tight">Nossos Produtos</h2>
+                <div className="flex flex-col md:flex-row items-center gap-6 justify-center">
+                    <h2 className="font-serif text-4xl md:text-5xl text-[#1E1A17] tracking-tight">Nossos Pães</h2>
+                    <SourdoughGuide />
+                </div>
                 <div className="w-12 h-[2px] bg-[#D6C1AE] mt-4"></div>
             </div>
 

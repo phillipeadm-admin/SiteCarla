@@ -3,6 +3,8 @@ import Image from "next/image";
 import ProductForm from "./ProductForm";
 import EditProductForm from "./EditProductForm";
 
+import DeleteProductButton from "./DeleteProductButton";
+
 export const revalidate = 0;
 
 export default async function AdminProducts() {
@@ -48,8 +50,9 @@ export default async function AdminProducts() {
                                     <span className="font-black text-[#3B2B23]">R$ {product.price.toFixed(2).replace('.', ',')}</span>
                                 </td>
                                 <td className="p-6">
-                                    <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <div className="flex items-center justify-end gap-2">
                                         <EditProductForm product={product} />
+                                        <DeleteProductButton id={product.id} name={product.name} />
                                     </div>
                                 </td>
                             </tr>

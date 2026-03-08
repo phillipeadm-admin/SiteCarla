@@ -86,23 +86,13 @@ export default function EditProductForm({ product }: { product: Product }) {
                                 </div>
                             </div>
 
-                            <div className="flex gap-4">
-                                <button
-                                    type="submit"
-                                    disabled={isSubmitting || isDeleting}
-                                    className="flex-1 bg-[#3B2B23] text-white py-5 rounded-2xl font-black text-lg shadow-lg hover:bg-[#5C4D44] transition-all disabled:opacity-50 flex items-center justify-center"
-                                >
-                                    {isSubmitting ? <Loader2 className="w-6 h-6 animate-spin" /> : 'SALVAR ALTERAÇÕES'}
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={handleDelete}
-                                    disabled={isSubmitting || isDeleting}
-                                    className="bg-red-50 text-red-600 px-6 py-5 rounded-2xl hover:bg-red-100 transition-all flex items-center justify-center border border-red-100"
-                                >
-                                    <Trash2 className="w-6 h-6" />
-                                </button>
-                            </div>
+                            <button
+                                type="submit"
+                                disabled={isSubmitting}
+                                className="w-full bg-[#3B2B23] text-white py-5 rounded-2xl font-black text-lg shadow-lg hover:bg-[#5C4D44] transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+                            >
+                                {isSubmitting ? <Loader2 className="w-5 h-5 animate-spin" /> : 'SALVAR ALTERAÇÕES'}
+                            </button>
                         </form>
                     </div>
                 </div>
