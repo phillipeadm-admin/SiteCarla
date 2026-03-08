@@ -19,23 +19,23 @@ export default function AdminSidebar() {
             </div>
 
             <nav className="flex-1 space-y-1">
-                <Link href="/admin" className="flex items-center gap-3 p-3 rounded-xl hover:bg-white/10 transition-colors group">
+                <Link href="/admin" className="flex items-center gap-3 p-3 rounded-xl hover:bg-white/10 transition-all duration-300 group hover:translate-x-2">
                     <LayoutDashboard className="w-5 h-5 text-[#B9A38C] group-hover:text-white" />
                     <span className="font-medium text-sm">Dashboard</span>
                 </Link>
-                <Link href="/admin/orders" className="flex items-center gap-3 p-3 rounded-xl hover:bg-white/10 transition-colors group">
+                <Link href="/admin/orders" className="flex items-center gap-3 p-3 rounded-xl hover:bg-white/10 transition-all duration-300 group hover:translate-x-2">
                     <ClipboardList className="w-5 h-5 text-[#B9A38C] group-hover:text-white" />
                     <span className="font-medium text-sm">Pedidos</span>
                 </Link>
-                <Link href="/admin/batches" className="flex items-center gap-3 p-3 rounded-xl hover:bg-white/10 transition-colors group">
+                <Link href="/admin/batches" className="flex items-center gap-3 p-3 rounded-xl hover:bg-white/10 transition-all duration-300 group hover:translate-x-2">
                     <Package className="w-5 h-5 text-[#B9A38C] group-hover:text-white" />
                     <span className="font-medium text-sm">Fornadas</span>
                 </Link>
-                <Link href="/admin/products" className="flex items-center gap-3 p-3 rounded-xl hover:bg-white/10 transition-colors group">
+                <Link href="/admin/products" className="flex items-center gap-3 p-3 rounded-xl hover:bg-white/10 transition-all duration-300 group hover:translate-x-2">
                     <Utensils className="w-5 h-5 text-[#B9A38C] group-hover:text-white" />
                     <span className="font-medium text-sm">Produtos</span>
                 </Link>
-                <Link href="/admin/notifications" className="flex items-center gap-3 p-3 rounded-xl hover:bg-white/10 transition-colors group relative">
+                <Link href="/admin/notifications" className="flex items-center gap-3 p-3 rounded-xl hover:bg-white/10 transition-all duration-300 group relative hover:translate-x-2">
                     <div className="w-5 h-5 flex items-center justify-center relative">
                         <Bell className="w-5 h-5 text-[#B9A38C] group-hover:text-white" />
                         <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-[#3B2B23] animate-pulse"></span>
@@ -45,11 +45,11 @@ export default function AdminSidebar() {
             </nav>
 
             <div className="pt-6 border-t border-white/10 mt-auto space-y-4">
-                <Link href="/admin/gallery" className="flex items-center gap-3 p-3 rounded-xl hover:bg-white/10 transition-colors group">
+                <Link href="/admin/gallery" className="flex items-center gap-3 p-3 rounded-xl hover:bg-white/10 transition-all duration-300 group hover:translate-x-2">
                     <Image className="w-5 h-5 text-[#B9A38C] group-hover:text-white" />
                     <span className="font-medium text-sm">Galeria (Vitrine)</span>
                 </Link>
-                <Link href="/" target="_blank" className="flex items-center gap-3 p-3 text-xs font-bold uppercase tracking-widest bg-white/5 rounded-xl hover:bg-white/10 transition-all opacity-80 hover:opacity-100 italic">
+                <Link href="/" target="_blank" className="flex items-center gap-3 p-3 text-xs font-bold uppercase tracking-widest bg-white/5 rounded-xl hover:bg-white/10 transition-all duration-300 opacity-80 hover:opacity-100 italic hover:translate-x-2">
                     <ArrowLeft className="w-4 h-4" /> Ver Site Inicial
                 </Link>
                 <button
