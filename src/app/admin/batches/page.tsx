@@ -98,12 +98,12 @@ export default async function AdminBatches() {
                                                             </div>
                                                             <div className="h-8 w-[1px] bg-[#EBE6DF] hidden xl:block" />
                                                             <div className="text-right flex items-center gap-2">
-                                                                <div className="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center text-orange-600">
+                                                                <div className={`w-8 h-8 rounded-full ${inCarts > 0 ? 'bg-orange-500 text-white' : 'bg-orange-100 text-orange-600'} flex items-center justify-center`}>
                                                                     <ShoppingCart className="w-4 h-4" />
                                                                 </div>
                                                                 <div>
-                                                                    <span className="block text-[8px] font-bold text-orange-600 uppercase tracking-wider">Em Carrinhos</span>
-                                                                    <span className="text-sm font-black text-orange-600">{inCarts} unid.</span>
+                                                                    <span className={`block text-[8px] font-bold ${inCarts > 0 ? 'text-orange-500' : 'text-orange-600'} uppercase tracking-wider`}>Em Carrinhos</span>
+                                                                    <span className={`text-sm font-black ${inCarts > 0 ? 'text-orange-500' : 'text-orange-600'}`}>{inCarts} unid.</span>
                                                                 </div>
                                                             </div>
                                                             

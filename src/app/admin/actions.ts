@@ -88,7 +88,7 @@ export async function createBatch(formData: FormData) {
     }
 
     try {
-        await prisma.batch.create({
+        const batch = await prisma.batch.create({
             data: {
                 productId,
                 availableDate,
@@ -98,9 +98,17 @@ export async function createBatch(formData: FormData) {
             }
         });
 
+        // O sistema deve avisar que há notificações pendentes?
+        // Na prática, o usuário quer que "desapareça do botão de notificação" ao avisar.
+        // Vou implementar a lógica de marcação automática ou aviso aqui se necessário,
+        // mas o pedido específico é que "envie mensagem automática no whatsapp".
+        // Como não há API, vamos garantir que ao entrar no admin/notifications após criar fornada,
+        // os clientes estejam lá com o botão pronto.
+
         revalidatePath('/admin/batches');
+        revalidatePath('/admin/notifications');
         revalidatePath('/');
-        return { success: true };
+        return { success: true, batchId: batch.id };
     } catch (error) {
         console.error(error);
         return { success: false, error: "Erro ao criar fornada." };

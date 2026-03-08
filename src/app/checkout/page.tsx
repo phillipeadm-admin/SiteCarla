@@ -8,6 +8,8 @@ import { useState, useEffect } from 'react';
 import { createOrder } from './actions';
 import CartTimer from '@/components/CartTimer';
 
+import ElegantConfirmModal from '@/components/ElegantConfirmModal';
+
 export default function CheckoutPage() {
     const { items, addItem, decreaseItem, removeItem, clearCart, total, finishOrder } = useCartStore();
     const [deliveryType, setDeliveryType] = useState<'RETIRADA' | 'ENTREGA'>('RETIRADA');
@@ -24,6 +26,7 @@ export default function CheckoutPage() {
     
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
+    const [showEmptyCartModal, setShowEmptyCartModal] = useState(false);
 
     const subtotal = total();
     const freight = deliveryType === 'ENTREGA' ? 15.0 : 0.0;

@@ -59,6 +59,9 @@ export default async function AdminNotifications() {
                                         <a
                                             href={`https://wa.me/55${notif.customerPhone.replace(/\D/g, '')}?text=Olá ${notif.customerName}, o ${notif.product.name} que você pediu para ser avisado já está disponível!`}
                                             target="_blank"
+                                            onClick={async () => {
+                                                await markNotificationAsRead(notif.id);
+                                            }}
                                             className="text-[10px] font-bold uppercase bg-[#25D366] text-white px-4 py-2 rounded-xl hover:bg-[#128C7E] transition-colors"
                                         >
                                             Chamar no WhatsApp
