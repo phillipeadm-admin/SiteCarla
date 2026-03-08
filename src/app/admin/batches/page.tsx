@@ -115,7 +115,7 @@ export default async function AdminBatches() {
                                                                     </p>
                                                                 </>
                                                             )}
-                                                            <div className="flex items-center gap-3 ml-auto xl:ml-4 w-full xl:w-auto justify-end">
+                                                            <div className="flex items-center gap-2 ml-auto xl:ml-4 w-full xl:w-auto justify-end">
                                                                 <EditBatchForm batch={{ ...batch, product: { name: product.name } }} />
                                                                 <DeleteBatchButton id={batch.id} dateStr={new Date(batch.availableDate).toLocaleString('pt-BR')} />
                                                             </div>
