@@ -47,7 +47,24 @@ export default async function AdminProducts() {
                                     <p className="text-xs text-[#5C4D44] line-clamp-1 max-w-xs">{product.description || 'Sem descrição'}</p>
                                 </td>
                                 <td className="p-6 text-center">
-                                    <span className="font-black text-[#3B2B23]">R$ {product.price.toFixed(2).replace('.', ',')}</span>
+                                    <div className="flex flex-col gap-1">
+                                        <div className="flex justify-between items-center text-[10px] gap-4">
+                                            <span className="text-[#8B6E5B] font-bold uppercase">P</span>
+                                            <span className="font-black text-[#3B2B23]">R$ {product.price.toFixed(2).replace('.', ',')}</span>
+                                        </div>
+                                        {product.priceM && (
+                                            <div className="flex justify-between items-center text-[10px] gap-4">
+                                                <span className="text-[#8B6E5B] font-bold uppercase">M</span>
+                                                <span className="font-black text-[#3B2B23]">R$ {product.priceM.toFixed(2).replace('.', ',')}</span>
+                                            </div>
+                                        )}
+                                        {product.priceG && (
+                                            <div className="flex justify-between items-center text-[10px] gap-4">
+                                                <span className="text-[#8B6E5B] font-bold uppercase">G</span>
+                                                <span className="font-black text-[#3B2B23]">R$ {product.priceG.toFixed(2).replace('.', ',')}</span>
+                                            </div>
+                                        )}
+                                    </div>
                                 </td>
                                 <td className="p-6">
                                     <div className="flex items-center justify-end gap-2">

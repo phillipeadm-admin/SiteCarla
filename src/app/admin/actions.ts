@@ -7,6 +7,8 @@ export async function createProduct(formData: FormData) {
     const name = formData.get('name') as string;
     const description = formData.get('description') as string;
     const price = parseFloat(formData.get('price') as string);
+    const priceM = parseFloat(formData.get('priceM') as string) || null;
+    const priceG = parseFloat(formData.get('priceG') as string) || null;
     const imageUrl = formData.get('imageUrl') as string;
 
     if (!name || isNaN(price)) {
@@ -19,6 +21,8 @@ export async function createProduct(formData: FormData) {
                 name,
                 description,
                 price,
+                priceM,
+                priceG,
                 imageUrl: imageUrl || "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=800&q=80",
             }
         });
@@ -37,6 +41,8 @@ export async function updateProduct(formData: FormData) {
     const name = formData.get('name') as string;
     const description = formData.get('description') as string;
     const price = parseFloat(formData.get('price') as string);
+    const priceM = parseFloat(formData.get('priceM') as string) || null;
+    const priceG = parseFloat(formData.get('priceG') as string) || null;
     const imageUrl = formData.get('imageUrl') as string;
 
     if (!id || !name || isNaN(price)) {
@@ -50,6 +56,8 @@ export async function updateProduct(formData: FormData) {
                 name,
                 description,
                 price,
+                priceM,
+                priceG,
                 imageUrl: imageUrl || undefined,
             }
         });
