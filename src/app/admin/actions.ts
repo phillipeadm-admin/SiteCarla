@@ -220,3 +220,15 @@ export async function getPendingNotificationsCount() {
     }
 }
 
+export async function deleteOrder(id: string) {
+    try {
+        await prisma.order.delete({ where: { id } });
+        revalidatePath('/admin/orders');
+        return { success: true };
+    } catch (error) {
+        console.error(error);
+        return { success: false, error: "Erro ao excluir pedido." };
+    }
+}
+
+

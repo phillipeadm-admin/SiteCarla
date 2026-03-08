@@ -81,25 +81,69 @@ export async function confirmOrderPayment(orderId: string) {
     try {
         const order = await prisma.order.findUnique({
             where: { id: orderId },
-            include: { items: true }
+            include: { 
+                items: { 
+                    include: { 
+                        batch: { 
+                            include: { product: true } 
+                        } 
+                    } 
+                } 
+            }
         });
 
         if (!order || order.status === "PAID") return { success: true };
 
-        // Atualizar status do pedido e estoque das fornadas
+        // Atualizar status do pedido e estoque das fornadas usando lógica FIFO (First-In, First-Out)
         await prisma.$transaction(async (tx) => {
+            // Verificar status novamente dentro da transação
+            const currentOrder = await tx.order.findUnique({
+                where: { id: orderId },
+                include: { items: { include: { batch: true } } }
+            });
+
+            if (!currentOrder || currentOrder.status === "PAID") return;
+
             await tx.order.update({
                 where: { id: orderId },
                 data: { status: "PAID" }
             });
 
-            for (const item of order.items) {
-                await tx.batch.update({
-                    where: { id: item.batchId },
-                    data: {
-                        soldQuantity: { increment: item.quantity }
-                    }
+            for (const item of currentOrder.items) {
+                const productId = item.batch.productId;
+                let quantityToDeduct = item.quantity;
+
+                // Buscar todas as fornadas deste produto que ainda têm estoque, 
+                // ordenadas pela data de disponibilidade (mais antiga primeiro)
+                const availableBatches = await tx.batch.findMany({
+                    where: { 
+                        productId: productId,
+                    },
+                    orderBy: { availableDate: 'asc' }
                 });
+
+                for (const batch of availableBatches) {
+                    const availableSpace = batch.totalCapacity - batch.soldQuantity;
+                    const amountFromThisBatch = Math.min(quantityToDeduct, availableSpace);
+
+                    if (amountFromThisBatch > 0) {
+                        await tx.batch.update({
+                            where: { id: batch.id },
+                            data: {
+                                soldQuantity: { increment: amountFromThisBatch }
+                            }
+                        });
+                        quantityToDeduct -= amountFromThisBatch;
+                    }
+
+                    if (quantityToDeduct === 0) break;
+                }
+
+                // Se ainda sobrar quantidade, significa que o estoque global acabou.
+                // Não subtraímos mais para não deixar negativo, conforme solicitado.
+                if (quantityToDeduct > 0) {
+                    console.warn(`Estoque insuficiente total para o produto no pedido ${orderId}. Restaram ${quantityToDeduct} sem baixa.`);
+                }
             }
         });
 
@@ -112,3 +156,4 @@ export async function confirmOrderPayment(orderId: string) {
         return { success: false };
     }
 }
+

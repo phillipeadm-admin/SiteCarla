@@ -2,16 +2,16 @@
 
 import { useState } from 'react';
 import { Trash2, Loader2 } from 'lucide-react';
-import { deleteProduct } from '../actions';
+import { deleteOrder } from '../actions';
 import ElegantConfirmModal from '@/components/ElegantConfirmModal';
 
-export default function DeleteProductButton({ id, name }: { id: string; name: string }) {
+export default function DeleteOrderButton({ id, customerName }: { id: string; customerName: string }) {
     const [isDeleting, setIsDeleting] = useState(false);
     const [showModal, setShowModal] = useState(false);
 
     async function handleDelete() {
         setIsDeleting(true);
-        const result = await deleteProduct(id);
+        const result = await deleteOrder(id);
         setIsDeleting(false);
 
         if (!result.success) {
@@ -24,22 +24,21 @@ export default function DeleteProductButton({ id, name }: { id: string; name: st
             <button
                 onClick={() => setShowModal(true)}
                 disabled={isDeleting}
-                className="p-2 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all disabled:opacity-50"
-                title="Excluir Produto"
+                className="bg-red-50 p-3 rounded-full hover:bg-red-500 hover:text-white text-red-500 transition-all disabled:opacity-50"
+                title="Excluir Pedido"
             >
-                {isDeleting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
+                {isDeleting ? <Loader2 className="w-5 h-5 animate-spin" /> : <Trash2 className="w-5 h-5" />}
             </button>
 
             <ElegantConfirmModal 
                 isOpen={showModal}
                 onClose={() => setShowModal(false)}
                 onConfirm={handleDelete}
-                title="Excluir Produto?"
-                description={`Você tem certeza que deseja remover "${name}" da sua vitrine? Esta ação é irreversível.`}
+                title="Excluir Pedido?"
+                description={`Você tem certeza que deseja excluir o pedido de "${customerName}"? Esta ação removerá o registro permanentemente.`}
                 confirmText="Sim, Excluir"
-                cancelText="Mantyêr Produto"
+                cancelText="Manter Pedido"
             />
         </>
     );
 }
-

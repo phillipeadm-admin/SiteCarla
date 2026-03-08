@@ -1,6 +1,7 @@
 import prisma from "@/lib/prisma";
 import Image from "next/image";
 import { Search, MapPin, Phone, Calendar, ChevronRight } from "lucide-react";
+import DeleteOrderButton from "./DeleteOrderButton";
 
 export const revalidate = 0;
 
@@ -91,6 +92,9 @@ export default async function AdminOrders() {
                                 }`}>
                                 {order.status === 'PAID' ? 'PAGO' : order.status === 'PREPARING' ? 'PRODUÇÃO' : 'PENDENTE'}
                             </div>
+                            
+                            <DeleteOrderButton id={order.id} customerName={order.customerName} />
+
                             <button className="bg-[#FAF5EF] p-3 rounded-full hover:bg-[#3B2B23] hover:text-white transition-all">
                                 <ChevronRight className="w-5 h-5" />
                             </button>

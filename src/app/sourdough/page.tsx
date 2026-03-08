@@ -78,64 +78,78 @@ export default function SourdoughPage() {
                             </div>
 
                             {/* Storage Card */}
-                            <div className="space-y-8">
+                            <div className="space-y-12">
                                 <h3 className="font-serif text-3xl text-[#1E1A17]">Como armazenar</h3>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                    <div className="space-y-6">
-                                        <div className="relative aspect-square bg-[#FAF8F5] rounded-3xl border border-[#EBE5DB] overflow-hidden">
-                                            <Image src="/sourdough_cutting.png" alt="Cutting bread" fill className="object-contain p-4 mix-blend-multiply opacity-90" />
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                                    {/* Step 1 */}
+                                    <div className="space-y-6 group">
+                                        <div className="relative aspect-square bg-[#FAF8F5] rounded-[40px] border border-[#EBE5DB] overflow-hidden transition-all group-hover:shadow-md">
+                                            <Image src="/sourdough_cutting.png" alt="Corte ao meio" fill className="object-contain p-6 mix-blend-multiply opacity-90 group-hover:scale-105 transition-transform duration-500" />
                                         </div>
                                         <div className="flex gap-4">
-                                            <span className="w-8 h-8 rounded-full bg-[#3B2B23] text-white flex items-center justify-center text-xs font-black">1</span>
-                                            <p className="text-[11px] text-[#5C4D44] uppercase font-bold tracking-widest pt-1 leading-snug">Corte ao meio; vire para baixo a parte cortada e fatie.</p>
+                                            <span className="w-8 h-8 rounded-full bg-[#3B2B23] text-white flex-shrink-0 flex items-center justify-center text-xs font-black shadow-sm">1</span>
+                                            <p className="text-[11px] text-[#5C4D44] uppercase font-bold tracking-widest pt-1 leading-snug">Corte ao meio para começar o processo.</p>
                                         </div>
                                     </div>
-                                    <div className="flex flex-col justify-end gap-6 h-full">
-                                        <div className="p-6 bg-[#FAF5EF] rounded-[32px] border border-[#EBE6DF]">
-                                            <div className="flex gap-4 mb-4">
-                                               <Box className="w-5 h-5 text-[#8B6E5B]" />
-                                               <span className="text-[10px] font-black uppercase tracking-widest text-[#8B6E5B]">Vedação Total</span>
-                                            </div>
-                                            <p className="text-xs text-[#5C4D44] leading-relaxed">
-                                                Armazene em um saco plástico para alimentos ou em uma vasilha bem vedada e guarde na geladeira.
-                                            </p>
+
+                                    {/* Step 2 */}
+                                    <div className="space-y-6 group md:translate-y-6">
+                                        <div className="relative aspect-square bg-[#FAF8F5] rounded-[40px] border border-[#EBE5DB] overflow-hidden transition-all group-hover:shadow-md">
+                                            <Image src="/sourdough_slicing.png" alt="Fatie" fill className="object-contain p-6 mix-blend-multiply opacity-90 group-hover:scale-105 transition-transform duration-500" />
+                                        </div>
+                                        <div className="flex gap-4">
+                                            <span className="w-8 h-8 rounded-full bg-[#3B2B23] text-white flex-shrink-0 flex items-center justify-center text-xs font-black shadow-sm">2</span>
+                                            <p className="text-[11px] text-[#5C4D44] uppercase font-bold tracking-widest pt-1 leading-snug">Vire para baixo a parte cortada e fatie com cuidado.</p>
+                                        </div>
+                                    </div>
+
+                                    {/* Step 3 */}
+                                    <div className="space-y-6 group">
+                                        <div className="relative aspect-square bg-[#FAF8F5] rounded-[40px] border border-[#EBE5DB] overflow-hidden transition-all group-hover:shadow-md">
+                                            <Image src="/sourdough_storing.png" alt="Armazene" fill className="object-contain p-6 mix-blend-multiply opacity-90 group-hover:scale-105 transition-transform duration-500" />
+                                        </div>
+                                        <div className="flex gap-4">
+                                            <span className="w-8 h-8 rounded-full bg-[#3B2B23] text-white flex-shrink-0 flex items-center justify-center text-xs font-black shadow-sm">3</span>
+                                            <p className="text-[11px] text-[#5C4D44] uppercase font-bold tracking-widest pt-1 leading-snug">Armazene em um saco plástico ou vasilha bem vedada na geladeira.</p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
+
                             {/* Reheating Section */}
-                            <div className="bg-[#3B2B23] p-8 md:p-12 rounded-[50px] text-white relative overflow-hidden group shadow-xl">
-                                <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-bl-full pointer-events-none group-hover:scale-110 transition-transform"></div>
-                                <h3 className="font-serif text-4xl text-white mb-10 leading-tight">Quer a sensação de <br />pão saindo do forno?</h3>
+                            <div className="bg-white p-8 md:p-12 rounded-[50px] text-[#3B2B23] relative border border-[#EBE5DB] overflow-hidden group shadow-sm transition-all hover:shadow-md">
+                                <h3 className="font-serif text-4xl text-[#1E1A17] mb-10 leading-tight">Quer a sensação de <br />pão saindo do forno?</h3>
                                 
                                 <div className="space-y-12">
                                     <div className="flex flex-col md:flex-row gap-8 items-center text-center md:text-left">
-                                        <div className="w-32 h-32 bg-white/10 rounded-3xl flex items-center justify-center p-4">
+                                        <div className="w-32 h-32 bg-[#3B2B23] rounded-3xl flex items-center justify-center p-4">
                                             <Image src="/sourdough_spray.png" alt="Spray" width={100} height={100} className="object-contain" />
                                         </div>
-                                        <p className="text-xs text-white/70 uppercase tracking-[0.2em] leading-relaxed flex-1">
-                                            <span className="text-[#D6C1AE] font-black block mb-2 underline">PASSO 01</span>
+                                        <p className="text-xs text-[#8B6E5B] uppercase tracking-[0.2em] leading-relaxed flex-1">
+                                            <span className="text-[#3B2B23] font-black block mb-2 underline">PASSO 01</span>
                                             Borrife ou respingue umas gotinhas de água filtrada nas fatias.
                                         </p>
                                     </div>
 
                                     <div className="flex flex-col md:flex-row gap-8 items-center text-center md:text-left">
-                                        <div className="w-32 h-32 bg-white/10 rounded-3xl flex items-center justify-center p-4">
+                                        <div className="w-32 h-32 bg-[#3B2B23] rounded-3xl flex items-center justify-center p-4">
                                             <Image src="/sourdough_heating.png" alt="Heating" width={100} height={100} className="object-contain" />
                                         </div>
-                                        <p className="text-xs text-white/70 uppercase tracking-[0.2em] leading-relaxed flex-1">
-                                            <span className="text-[#D6C1AE] font-black block mb-2 underline">PASSO 02</span>
+                                        <p className="text-xs text-[#8B6E5B] uppercase tracking-[0.2em] leading-relaxed flex-1">
+                                            <span className="text-[#3B2B23] font-black block mb-2 underline">PASSO 02</span>
                                             Aqueça no forno, airfryer, torredeira ou frigideira bem quente.
                                         </p>
                                     </div>
                                 </div>
 
-                                <div className="mt-12 pt-8 border-t border-white/10 flex items-center gap-6">
-                                    <Ban className="w-10 h-10 text-red-400" />
+                                <div className="mt-12 pt-8 border-t border-[#EBE5DB] flex items-center gap-6">
+                                    <div className="w-10 h-10 bg-red-50 text-red-500 rounded-full flex items-center justify-center">
+                                        <Ban className="w-6 h-6" />
+                                    </div>
                                     <div className="space-y-1">
-                                        <p className="text-sm font-black uppercase tracking-widest text-[#D6C1AE]">Esqueça o microondas!</p>
-                                        <p className="text-[10px] text-white/50 uppercase tracking-widest">Ele não é um bom amigo do pão artesanal.</p>
+                                        <p className="text-sm font-black uppercase tracking-widest text-red-600">Esqueça o microondas!</p>
+                                        <p className="text-[10px] text-[#8B6E5B] uppercase tracking-widest leading-relaxed">Ele não é um bom amigo do pão artesanal.</p>
                                     </div>
                                 </div>
                             </div>

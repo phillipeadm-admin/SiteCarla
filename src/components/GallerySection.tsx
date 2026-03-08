@@ -20,19 +20,19 @@ export default function GallerySection({ images }: { images: GalleryImage[] }) {
                 {images.map((image, index) => (
                     <div 
                         key={image.id} 
-                        className={`group relative overflow-hidden bg-white aspect-square rounded-[24px] md:rounded-[32px] transition-all duration-700 hover:shadow-[0_20px_40px_rgba(59,43,35,0.1)] hover:-translate-y-2 ${
-                            index % 2 !== 0 ? 'md:translate-y-6' : ''
+                        className={`group relative overflow-hidden bg-white aspect-square rounded-[60px] md:rounded-[80px_20px_80px_20px] transition-all duration-700 hover:shadow-[0_40px_80px_rgba(59,43,35,0.15)] hover:-translate-y-4 hover:rotate-1 ${
+                            index % 2 !== 0 ? 'md:translate-y-8' : ''
                         }`}
                     >
-                        <div className="absolute inset-0 border border-[#EBE5DB] rounded-[24px] md:rounded-[32px] z-10 pointer-events-none group-hover:border-[#3B2B23]/10 transition-colors"></div>
+                        <div className="absolute inset-0 border border-[#EBE5DB] rounded-[60px] md:rounded-[80px_20px_80px_20px] z-10 pointer-events-none group-hover:border-[#3B2B23]/20 transition-colors"></div>
                         <Image
                             src={image.imageUrl}
                             alt="Momento Romagnolle"
                             fill
-                            className="object-cover grayscale-[20%] group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-110"
+                            className="object-cover grayscale-[30%] group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-125 group-hover:rotate-1"
                             sizes="(max-width: 768px) 33vw, 16vw"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-[#3B2B23]/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#3B2B23]/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
                     </div>
                 ))}
             </div>
