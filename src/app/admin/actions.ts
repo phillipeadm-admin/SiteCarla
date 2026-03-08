@@ -158,7 +158,7 @@ export async function deleteBatch(id: string) {
         return { success: true };
     } catch (error) {
         console.error(error);
-        return { success: false, error: "Erro ao cancelar fornada. Verifique relacionamentos (como pedidos)." };
+        return { success: false, error: "Erro ao excluir fornada." };
     }
 }
 

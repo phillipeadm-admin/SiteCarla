@@ -24,7 +24,7 @@ model Product {
 model Batch {
   id              String   @id @default(uuid())
   productId       String
-  product         Product  @relation(fields: [productId], references: [id])
+  product         Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
   
   availableDate   DateTime // Data/Hora em que a fornada ficará (ou ficou) disponível
   totalCapacity   Int      // Capacidade total do forno para essa fornada
@@ -58,10 +58,10 @@ model Order {
 model OrderItem {
   id        String   @id @default(uuid())
   orderId   String
-  order     Order    @relation(fields: [orderId], references: [id])
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
   
   batchId   String
-  batch     Batch    @relation(fields: [batchId], references: [id])
+  batch     Batch    @relation(fields: [batchId], references: [id], onDelete: Cascade)
   
   quantity  Int
   pricePaid Float    // Snapshot do preço pago no momento
@@ -78,7 +78,7 @@ model Gallery {
 model AvailabilityNotification {
   id            String   @id @default(uuid())
   productId     String
-  product       Product  @relation(fields: [productId], references: [id])
+  product       Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
   customerName  String
   customerPhone String
   notified      Boolean  @default(false)
