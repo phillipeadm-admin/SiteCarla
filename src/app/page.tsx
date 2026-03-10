@@ -150,7 +150,7 @@ export default async function Home() {
 
         {/* Products Horizontal Scroll / Carousel */}
         <div id="assinatura" className="w-full relative z-20 mt-16 px-4 md:px-10">
-          <div className="flex overflow-x-auto gap-8 md:gap-12 pb-16 no-scrollbar snap-x snap-mandatory cursor-grab active:cursor-grabbing">
+          <div className="flex overflow-x-auto gap-8 md:gap-12 pb-16 no-scrollbar snap-x snap-mandatory cursor-grab active:cursor-grabbing md:justify-center">
             {products.map(product => (
               <div key={product.id} className="min-w-[300px] md:min-w-[400px] snap-center transition-all duration-500 hover:scale-[1.02]">
                 <ProductCard product={product} />
