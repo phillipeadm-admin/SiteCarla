@@ -36,8 +36,25 @@ model Batch {
   observation     String?  // Campo de observação facultativo
   
   orderItems      OrderItem[]
+  cartReservations CartReservation[]
+  notifications   AvailabilityNotification[]
 
   createdAt       DateTime @default(now())
+}
+
+model CartReservation {
+  id        String   @id @default(uuid())
+  batchId   String
+  batch     Batch    @relation(fields: [batchId], references: [id], onDelete: Cascade)
+  quantity  Int
+  sessionId String   // Para identificar o carrinho do usuário
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([batchId])
+  @@index([sessionId])
+  @@unique([sessionId, batchId])
 }
 
 model Order {
@@ -84,5 +101,7 @@ model AvailabilityNotification {
   customerName  String
   customerPhone String
   notified      Boolean  @default(false)
+  batchId       String?  // Opcional: link para a fornada que disparou o aviso
+  batch         Batch?   @relation(fields: [batchId], references: [id], onDelete: SetNull)
   createdAt     DateTime @default(now())
 }

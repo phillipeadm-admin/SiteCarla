@@ -21,8 +21,16 @@ export default function NotifyMeModal({ productId, productName, isOpen, onClose 
 
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
+        
+        // Validação de 11 dígitos
+        const cleanPhone = phone.replace(/\D/g, '');
+        if (cleanPhone.length !== 11) {
+            alert('Por favor, insira o WhatsApp com DDD (11 dígitos, ex: 11999999999)');
+            return;
+        }
+
         setIsSubmitting(true);
-        const result = await createNotification(productId, name, phone);
+        const result = await createNotification(productId, name, cleanPhone);
         setIsSubmitting(false);
         if (result.success) {
             setIsSuccess(true);
@@ -36,6 +44,13 @@ export default function NotifyMeModal({ productId, productName, isOpen, onClose 
         setName('');
         setPhone('');
         onClose();
+    };
+
+    const formatPhone = (val: string) => {
+        const numbers = val.replace(/\D/g, '');
+        if (numbers.length <= 2) return numbers;
+        if (numbers.length <= 7) return `(${numbers.slice(0, 2)}) ${numbers.slice(2)}`;
+        return `(${numbers.slice(0, 2)}) ${numbers.slice(2, 7)}-${numbers.slice(7, 11)}`;
     };
 
     return (
@@ -89,12 +104,15 @@ export default function NotifyMeModal({ productId, productName, isOpen, onClose 
                             </div>
 
                             <div>
-                                <label className="text-[10px] font-bold text-[#8B6E5B] uppercase px-1 mb-2 block tracking-widest">WhatsApp</label>
+                                <label className="text-[10px] font-bold text-[#8B6E5B] uppercase px-1 mb-2 block tracking-widest">WhatsApp (com DDD)</label>
                                 <input 
                                     value={phone}
-                                    onChange={(e) => setPhone(e.target.value)}
+                                    onChange={(e) => {
+                                        setPhone(formatPhone(e.target.value));
+                                    }}
                                     required 
-                                    placeholder="(00) 00000-0000" 
+                                    type="tel"
+                                    placeholder="(11) 99999-9999" 
                                     className="w-full bg-[#FAF5EF] border-0 rounded-2xl px-6 py-4 text-sm focus:ring-2 focus:ring-[#3B2B23]" 
                                 />
                             </div>

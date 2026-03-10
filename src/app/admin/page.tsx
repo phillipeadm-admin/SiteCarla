@@ -1,5 +1,6 @@
 import prisma from "@/lib/prisma";
 import { ClipboardList, Package, TrendingUp, Users } from "lucide-react";
+import RealtimeRefresh from "@/components/RealtimeRefresh";
 
 export const revalidate = 0; // Mostrar dados em tempo real
 
@@ -22,6 +23,7 @@ export default async function AdminDashboard() {
 
     return (
         <div>
+            <RealtimeRefresh />
             <header className="mb-10">
                 <h1 className="font-serif text-4xl font-black text-[#3B2B23]">Dashboard de Produção</h1>
                 <p className="text-[#8B6E5B] font-medium uppercase text-xs tracking-widest mt-2">Visão geral do sistema Romagnolle</p>

@@ -1,8 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { Plus, X } from 'lucide-react';
+import { Plus, X, CheckCircle, Bell, ArrowRight } from 'lucide-react';
 import { createBatch } from '../actions';
+import Link from 'next/link';
 
 interface Product {
     id: string;
@@ -12,13 +13,18 @@ interface Product {
 export default function BatchForm({ products }: { products: Product[] }) {
     const [isOpen, setIsOpen] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [showSuccessModal, setShowSuccessModal] = useState(false);
+    const [lastCreatedProduct, setLastCreatedProduct] = useState('');
 
     async function handleSubmit(formData: FormData) {
         setIsSubmitting(true);
         const result = await createBatch(formData);
         setIsSubmitting(false);
         if (result.success) {
+            const productName = products.find(p => p.id === formData.get('productId'))?.name || 'produto';
+            setLastCreatedProduct(productName);
             setIsOpen(false);
+            setShowSuccessModal(true);
         } else {
             alert(result.error);
         }
@@ -89,6 +95,46 @@ export default function BatchForm({ products }: { products: Product[] }) {
                                 {isSubmitting ? 'CRIANDO...' : 'CRIAR FORNADA'}
                             </button>
                         </form>
+                    </div>
+                </div>
+            )}
+
+            {/* Modal de Sucesso com Alta Visibilidade */}
+            {showSuccessModal && (
+                <div className="fixed inset-0 bg-[#3B2B23]/60 backdrop-blur-md z-[110] flex items-center justify-center p-6 animate-in fade-in duration-300">
+                    <div className="bg-white rounded-[40px] p-10 md:p-12 w-full max-w-lg shadow-2xl relative text-center animate-in zoom-in slide-in-from-bottom-4 duration-500">
+                        <div className="w-24 h-24 bg-green-50 rounded-[32px] flex items-center justify-center mx-auto mb-8 shadow-sm">
+                            <CheckCircle className="w-12 h-12 text-green-500" />
+                        </div>
+                        
+                        <h2 className="font-serif text-4xl font-black text-[#3B2B23] mb-4">Fornada Criada!</h2>
+                        
+                        <div className="bg-[#FAF5EF] rounded-3xl p-6 mb-8 border border-[#EBE6DF]">
+                            <div className="flex items-center justify-center gap-3 text-[#E66A46] mb-3">
+                                <Bell className="w-5 h-5" />
+                                <span className="text-[10px] font-black uppercase tracking-[0.2em]">Ação Necessária</span>
+                            </div>
+                            <p className="text-[#3B2B23] font-bold text-lg leading-tight">
+                                Avise seu cliente no menu notificações do <span className="text-[#E66A46]">{lastCreatedProduct}</span>
+                            </p>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <Link 
+                                href="/admin/notifications"
+                                onClick={() => setShowSuccessModal(false)}
+                                className="bg-[#3B2B23] text-white py-5 rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-lg hover:bg-[#5C4D44] transition-all flex items-center justify-center gap-3"
+                            >
+                                Ver Notificações <ArrowRight className="w-4 h-4" />
+                            </Link>
+
+                            <button
+                                onClick={() => setShowSuccessModal(false)}
+                                className="bg-[#FAF5EF] text-[#8B6E5B] py-5 rounded-2xl font-black text-xs uppercase tracking-[0.2em] border border-[#EBE6DF] hover:bg-[#EBE6DF] transition-all"
+                            >
+                                Agora Não
+                            </button>
+                        </div>
                     </div>
                 </div>
             )}

@@ -7,11 +7,19 @@ interface WhatsAppButtonProps {
     customerPhone: string;
     customerName: string;
     productName: string;
+    batchDate?: Date;
 }
 
-export default function WhatsAppButton({ id, customerPhone, customerName, productName }: WhatsAppButtonProps) {
+export default function WhatsAppButton({ id, customerPhone, customerName, productName, batchDate }: WhatsAppButtonProps) {
     const cleanPhone = customerPhone.replace(/\D/g, '');
-    const message = `Olá ${customerName}, o ${productName} que você pediu para ser avisado já está disponível!`;
+    
+    let message = `Olá ${customerName}, o ${productName} que você pediu para ser avisado já está disponível!`;
+    
+    if (batchDate) {
+        const formattedDate = new Date(batchDate).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+        message = `Olá ${customerName}! Boas notícias: o ${productName} que você reservou já está disponível na fornada de ${formattedDate}! 🍞✨`;
+    }
+    
     const href = `https://wa.me/55${cleanPhone}?text=${encodeURIComponent(message)}`;
 
     return (
@@ -24,7 +32,7 @@ export default function WhatsAppButton({ id, customerPhone, customerName, produc
             }}
             className="text-[10px] font-bold uppercase bg-[#25D366] text-white px-4 py-2 rounded-xl hover:bg-[#128C7E] transition-colors"
         >
-            Chamar no WhatsApp
+            Avisar no Whatsapp
         </a>
     );
 }

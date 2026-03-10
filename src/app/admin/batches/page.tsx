@@ -3,6 +3,7 @@ import { Package, Clock, Calendar, Hash, ShoppingCart } from "lucide-react";
 import BatchForm from "./BatchForm";
 import EditBatchForm from "./EditBatchForm";
 import DeleteBatchButton from "./DeleteBatchButton";
+import RealtimeRefresh from "@/components/RealtimeRefresh";
 
 export const revalidate = 0;
 
@@ -16,6 +17,11 @@ export default async function AdminBatches() {
                         where: {
                             order: { status: { not: "PENDING" } }
                         }
+                    },
+                    cartReservations: {
+                        where: {
+                            expiresAt: { gte: new Date() }
+                        }
                     }
                 }
             }
@@ -27,6 +33,7 @@ export default async function AdminBatches() {
 
     return (
         <div className="max-w-6xl mx-auto">
+            <RealtimeRefresh />
             <header className="mb-12 flex justify-between items-end">
                 <div>
                     <h1 className="font-serif text-5xl font-black text-[#3B2B23] tracking-tight">Estoque & Fornadas</h1>
@@ -70,10 +77,7 @@ export default async function AdminBatches() {
                                         </div>
                                         <div className="flex flex-col gap-3">
                                             {product.batches.map((batch) => {
-                                                const paidQuantity = batch.orderItems.reduce((acc, item) => acc + item.quantity, 0);
-                                                // As reservas totais são soldQuantity. As pagas são orderItems.
-                                                // O restante está em PENDING / Carrinhos ativos.
-                                                const inCarts = Math.max(0, batch.soldQuantity - paidQuantity);
+                                                const inCarts = (batch.cartReservations || []).reduce((acc: number, res: any) => acc + (res.quantity || 0), 0);
 
                                                 return (
                                                     <div key={batch.id} className="bg-[#FAF5EF]/60 hover:bg-[#FAF5EF] transition-all rounded-2xl p-4 md:p-5 border border-[#EBE6DF] flex flex-col xl:flex-row items-start xl:items-center justify-between gap-4 md:gap-6">

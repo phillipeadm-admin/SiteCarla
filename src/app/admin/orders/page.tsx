@@ -2,6 +2,7 @@ import prisma from "@/lib/prisma";
 import Image from "next/image";
 import { Search, MapPin, Phone, Calendar, ChevronRight } from "lucide-react";
 import DeleteOrderButton from "./DeleteOrderButton";
+import RealtimeRefresh from "@/components/RealtimeRefresh";
 
 export const revalidate = 0;
 
@@ -13,6 +14,7 @@ export default async function AdminOrders() {
 
     return (
         <div>
+            <RealtimeRefresh />
             <header className="mb-10 flex justify-between items-center">
                 <div>
                     <h1 className="font-serif text-4xl font-black text-[#3B2B23]">Lista de Pedidos</h1>

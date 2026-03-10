@@ -15,8 +15,8 @@ export default function AdminSidebar() {
         };
         fetchCount();
         
-        // Opcional: Polling a cada 30 segundos
-        const interval = setInterval(fetchCount, 30000);
+        // Polling de 2 segundos para o alerta aparecer "instantaneamente"
+        const interval = setInterval(fetchCount, 2000);
         return () => clearInterval(interval);
     }, []);
 
@@ -55,7 +55,10 @@ export default function AdminSidebar() {
                     <div className="w-5 h-5 flex items-center justify-center relative">
                         <Bell className="w-5 h-5 text-[#B9A38C] group-hover:text-white" />
                         {pendingCount > 0 && (
-                            <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-[#3B2B23] animate-pulse"></span>
+                            <span className="absolute -top-1 -right-1 flex h-3 w-3">
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#E66A46] opacity-75"></span>
+                                <span className="relative inline-flex rounded-full h-3 w-3 bg-[#E66A46] border-2 border-[#3B2B23] animate-pulse"></span>
+                            </span>
                         )}
                     </div>
                     <span className="font-medium text-sm">Notificações</span>

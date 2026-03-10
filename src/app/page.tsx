@@ -6,8 +6,8 @@ import FloatingWhatsApp from "@/components/FloatingWhatsApp";
 import Footer from "@/components/Footer";
 import prisma from "@/lib/prisma";
 import GallerySection from "@/components/GallerySection";
-
-export const revalidate = 60; // Cache de 60 segundos para melhorar performance
+import RealtimeRefresh from "@/components/RealtimeRefresh";
+export const revalidate = 0;
 
 export default async function Home() {
   const productsFromDb = await prisma.product.findMany({
@@ -16,6 +16,11 @@ export default async function Home() {
         where: {
           availableDate: {
             gte: new Date(new Date().setHours(0, 0, 0, 0))
+          }
+        },
+        include: {
+          cartReservations: {
+            where: { expiresAt: { gte: new Date() } }
           }
         },
         orderBy: {
@@ -29,8 +34,8 @@ export default async function Home() {
     orderBy: { createdAt: 'desc' }
   });
 
-  const products = productsFromDb.map(p => {
-    const activeBatch = p.batches.find(b => b.totalCapacity > b.soldQuantity);
+  const products = (productsFromDb || []).map(p => {
+    const activeBatch = p.batches?.find(b => b.totalCapacity > b.soldQuantity);
     let availability = "Sem estoque";
     let batchId = "";
     let availableQuantity = 0;
@@ -47,7 +52,8 @@ export default async function Home() {
         const dayNum = date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' });
         availability = `Disponível ${dayName}, ${dayNum}`;
       }
-      availableQuantity = activeBatch.totalCapacity - activeBatch.soldQuantity;
+      const inCarts = (activeBatch.cartReservations || []).reduce((acc: number, res: any) => acc + (res.quantity || 0), 0);
+      availableQuantity = Math.max(0, activeBatch.totalCapacity - activeBatch.soldQuantity - inCarts);
     }
 
     return {
@@ -166,6 +172,8 @@ export default async function Home() {
       <Footer />
       <FloatingWhatsApp />
       <FloatingCart />
+
+      <RealtimeRefresh />
     </main>
   );
 }

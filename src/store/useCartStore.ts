@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { useToastStore } from './useToastStore';
-import { reserveStock, releaseStock, releaseAllStock } from '@/app/cart/actions';
+import { syncCartItem } from '@/app/actions/cartSync';
 
 export interface CartItem {
     id: string; // ID da Fornada (Batch)
@@ -15,6 +15,7 @@ export interface CartItem {
 }
 
 interface CartStore {
+    sessionId: string | null;
     items: CartItem[];
     expiresAt: number | null;
     addItem: (item: CartItem) => Promise<void>;
@@ -31,6 +32,7 @@ const RESERVATION_TIME = 10 * 60 * 1000; // 10 minutos
 export const useCartStore = create<CartStore>()(
     persist(
         (set, get) => ({
+            sessionId: null,
             items: [],
             expiresAt: null,
             addItem: async (newItem) => {
@@ -48,23 +50,35 @@ export const useCartStore = create<CartStore>()(
                     return;
                 }
 
+                // Garantir Session ID
+                let sid = get().sessionId;
+                if (!sid) {
+                    sid = Math.random().toString(36).substring(2, 15);
+                    set({ sessionId: sid });
+                }
+
                 // Atualizar Estado Local
                 const newExpiresAt = get().expiresAt || (Date.now() + RESERVATION_TIME);
 
                 if (existingItem) {
+                    const newQuantity = existingItem.quantity + 1;
                     set({
                         expiresAt: newExpiresAt,
                         items: currentItems.map((item) =>
                             item.id === newItem.id
-                                ? { ...item, quantity: item.quantity + 1 }
+                                ? { ...item, quantity: newQuantity }
                                 : item
                         ),
                     });
+                    // Sincronizar com DB
+                    await syncCartItem(newItem.id, newQuantity, sid);
                 } else {
                     set({
                         expiresAt: newExpiresAt,
                         items: [...currentItems, { ...newItem, quantity: 1 }]
                     });
+                    // Sincronizar com DB
+                    await syncCartItem(newItem.id, 1, sid);
                 }
 
                 useToastStore.getState().showToast({
@@ -75,36 +89,49 @@ export const useCartStore = create<CartStore>()(
             decreaseItem: async (id) => {
                 const currentItems = get().items;
                 const existingItem = currentItems.find((item) => item.id === id);
+                const sid = get().sessionId;
 
-                if (!existingItem) return;
+                if (!existingItem || !sid) return;
 
                 if (existingItem.quantity > 1) {
+                    const newQuantity = existingItem.quantity - 1;
                     set({
                         items: currentItems.map((item) =>
-                            item.id === id ? { ...item, quantity: item.quantity - 1 } : item
+                            item.id === id ? { ...item, quantity: newQuantity } : item
                         )
                     });
+                    await syncCartItem(id, newQuantity, sid);
                 } else {
                     const remainingItems = currentItems.filter((item) => item.id !== id);
                     set({
                         items: remainingItems,
                         expiresAt: remainingItems.length === 0 ? null : get().expiresAt
                     });
+                    await syncCartItem(id, 0, sid);
                 }
             },
             removeItem: async (id) => {
+                const sid = get().sessionId;
                 const remainingItems = get().items.filter((item) => item.id !== id);
                 set({
                     items: remainingItems,
                     expiresAt: remainingItems.length === 0 ? null : get().expiresAt
                 });
+                if (sid) await syncCartItem(id, 0, sid);
             },
             clearCart: async () => {
+                const sid = get().sessionId;
+                const items = get().items;
                 set({ items: [], expiresAt: null });
+                if (sid) {
+                    for (const item of items) {
+                        await syncCartItem(item.id, 0, sid);
+                    }
+                }
             },
             finishOrder: () => set({ items: [], expiresAt: null }),
             checkExpiration: async () => {
-                const { expiresAt, items } = get();
+                const { expiresAt, items, sessionId } = get();
                 if (expiresAt && Date.now() > expiresAt) {
                     if (items.length > 0) {
                         useToastStore.getState().showToast({
@@ -112,6 +139,11 @@ export const useCartStore = create<CartStore>()(
                             type: "warning",
                             duration: 6000
                         });
+                        if (sessionId) {
+                            for (const item of items) {
+                                await syncCartItem(item.id, 0, sessionId);
+                            }
+                        }
                     }
                     set({ items: [], expiresAt: null });
                 }

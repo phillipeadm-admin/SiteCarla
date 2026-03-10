@@ -4,17 +4,23 @@ import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import MarkReadButton from "./MarkReadButton";
 import WhatsAppButton from "./WhatsAppButton";
+import RealtimeRefresh from "@/components/RealtimeRefresh";
+import DeleteNotificationButton from "./DeleteNotificationButton";
 
 export const revalidate = 0;
 
 export default async function AdminNotifications() {
     const notifications = await prisma.availabilityNotification.findMany({
-        include: { product: true },
+        include: { 
+            product: true,
+            batch: true
+        },
         orderBy: { createdAt: 'desc' }
     });
 
     return (
         <div>
+            <RealtimeRefresh />
             <header className="mb-10">
                 <h1 className="font-serif text-4xl font-black text-[#3B2B23]">Notificações de Aviso</h1>
                 <p className="text-[#8B6E5B] font-medium uppercase text-xs tracking-widest mt-2">Clientes aguardando disponibilidade de produtos</p>
@@ -48,21 +54,36 @@ export default async function AdminNotifications() {
                                     </span>
                                 </td>
                                 <td className="p-6 text-right">
-                                    <div className="flex items-center justify-end gap-3">
-                                        {notif.notified ? (
-                                            <span className="text-[10px] font-bold uppercase text-green-600 bg-green-50 px-3 py-1 rounded-full">Notificado</span>
-                                        ) : (
-                                            <div className="flex items-center gap-2">
-                                                <span className="text-[10px] font-bold uppercase text-orange-600 bg-orange-50 px-3 py-1 rounded-full animate-pulse">Aguardando</span>
-                                                <MarkReadButton id={notif.id} isRead={notif.notified} />
-                                            </div>
-                                        )}
-                                        <WhatsAppButton 
-                                            id={notif.id}
-                                            customerPhone={notif.customerPhone}
-                                            customerName={notif.customerName}
-                                            productName={notif.product.name}
-                                        />
+                                    <div className="flex flex-col items-end gap-2">
+                                        <div className="flex items-center justify-end gap-3">
+                                            {notif.notified ? (
+                                                <div className="flex flex-col items-end gap-1">
+                                                    <span className="text-[10px] font-bold uppercase text-green-600 bg-green-50 px-3 py-1 rounded-full">Atendido</span>
+                                                    {notif.batch && (
+                                                        <span className="text-[9px] text-[#8B6E5B] font-medium">
+                                                            Para: {format(new Date(notif.batch.availableDate), "dd/MM", { locale: ptBR })}
+                                                        </span>
+                                                    )}
+                                                </div>
+                                            ) : (
+                                                <div className="flex items-center gap-2">
+                                                    <span className="text-[10px] font-bold uppercase text-orange-600 bg-orange-50 px-3 py-1 rounded-full animate-pulse">Aguardando</span>
+                                                    <MarkReadButton id={notif.id} isRead={notif.notified} />
+                                                </div>
+                                            )}
+                                            <WhatsAppButton 
+                                                id={notif.id}
+                                                customerPhone={notif.customerPhone}
+                                                customerName={notif.customerName}
+                                                productName={notif.product.name}
+                                                batchDate={notif.batch?.availableDate}
+                                            />
+                                            <DeleteNotificationButton 
+                                                id={notif.id}
+                                                customerName={notif.customerName}
+                                                productName={notif.product.name}
+                                            />
+                                        </div>
                                     </div>
                                 </td>
                             </tr>

@@ -107,14 +107,20 @@ export async function createBatch(formData: FormData) {
         });
 
         // Marcar todas as notificações pendentes para este produto como "notificadas"
-        // Isso faz com que elas desapareçam do balão de notificações/lista pendente
+        // e vincular à nova fornada que as atendeu
         await prisma.availabilityNotification.updateMany({
             where: {
                 productId,
                 notified: false
             },
-            data: { notified: true }
+            data: { 
+                notified: true,
+                batchId: batch.id
+            }
         });
+
+        // TODO: Implementar disparo automático de WhatsApp aqui se houver integração
+        // Por enquanto o sistema já correlaciona e marca como atendido
 
         revalidatePath('/admin/batches');
         revalidatePath('/admin/notifications');
@@ -247,6 +253,17 @@ export async function deleteOrder(id: string) {
     } catch (error) {
         console.error(error);
         return { success: false, error: "Erro ao excluir pedido." };
+    }
+}
+
+export async function deleteNotification(id: string) {
+    try {
+        await prisma.availabilityNotification.delete({ where: { id } });
+        revalidatePath('/admin/notifications');
+        return { success: true };
+    } catch (error) {
+        console.error(error);
+        return { success: false, error: "Erro ao excluir notificação." };
     }
 }
 
