@@ -104,4 +104,7 @@ model AvailabilityNotification {
   batchId       String?  // Opcional: link para a fornada que disparou o aviso
   batch         Batch?   @relation(fields: [batchId], references: [id], onDelete: SetNull)
   createdAt     DateTime @default(now())
+
+  @@index([notified])
+  @@index([createdAt])
 }

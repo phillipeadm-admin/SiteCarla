@@ -15,7 +15,8 @@ export default async function AdminNotifications() {
             product: true,
             batch: true
         },
-        orderBy: { createdAt: 'desc' }
+        orderBy: { createdAt: 'desc' },
+        take: 50
     });
 
     return (

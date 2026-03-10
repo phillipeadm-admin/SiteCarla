@@ -11,7 +11,7 @@ export default function RealtimeRefresh() {
         // Este é um fallback robusto que não exige configuração extra de WebSockets/Supabase Realtime
         const interval = setInterval(() => {
             router.refresh();
-        }, 2000);
+        }, 15000);
 
         return () => clearInterval(interval);
     }, [router]);

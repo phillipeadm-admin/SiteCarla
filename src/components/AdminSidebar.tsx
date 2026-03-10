@@ -16,7 +16,7 @@ export default function AdminSidebar() {
         fetchCount();
         
         // Polling de 2 segundos para o alerta aparecer "instantaneamente"
-        const interval = setInterval(fetchCount, 2000);
+        const interval = setInterval(fetchCount, 15000);
         return () => clearInterval(interval);
     }, []);
 
