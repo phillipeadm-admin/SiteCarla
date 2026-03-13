@@ -44,7 +44,7 @@ export default function ProductCard({ product }: { product: Product }) {
                     src={product.imageUrl}
                     alt={product.name}
                     fill
-                    className="object-cover rounded-2xl transform group-hover:scale-105 transition-transform duration-700"
+                    className="object-cover rounded-full transform group-hover:scale-105 transition-transform duration-700"
                     sizes="(max-width: 768px) 300px, 400px"
                     quality={80}
                 />

@@ -40,7 +40,7 @@ export default async function NossosPaesPage() {
                         >
                             <div className="w-full lg:w-1/2 relative group">
                                 {product.imageUrl ? (
-                                    <div className="relative aspect-square md:aspect-[4/3] overflow-hidden rounded-[40px] md:rounded-[100px_30px_100px_30px] border border-[#EBE5DB] bg-white shadow-sm transition-all duration-700 hover:shadow-2xl hover:-translate-y-2">
+                                    <div className="relative aspect-square md:aspect-square overflow-hidden rounded-full border border-[#EBE5DB] bg-white shadow-sm transition-all duration-700 hover:shadow-2xl hover:-translate-y-2 max-w-[500px] mx-auto">
                                         <div className="absolute inset-0 bg-gradient-to-tr from-[#F5F2EC] to-transparent opacity-50"></div>
                                         <Image
                                             src={product.imageUrl}
@@ -53,7 +53,7 @@ export default async function NossosPaesPage() {
                                         />
                                     </div>
                                 ) : (
-                                    <div className="w-full aspect-square md:aspect-[4/3] bg-[#EBE5DB] flex items-center justify-center rounded-[40px] md:rounded-[100px_30px_100px_30px]">
+                                    <div className="w-full aspect-square bg-[#EBE5DB] flex items-center justify-center rounded-full max-w-[500px] mx-auto">
                                         <span className="text-[#8B6E5B] font-serif italic text-lg opacity-60">Sem fotografia</span>
                                     </div>
                                 )}

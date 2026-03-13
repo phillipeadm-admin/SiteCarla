@@ -37,7 +37,7 @@ export default async function AdminProducts() {
                             <tr key={product.id} className="hover:bg-gray-50 transition-colors group">
                                 <td className="p-6">
                                     <div className="flex items-center gap-4">
-                                        <div className="relative w-12 h-12 rounded-xl overflow-hidden bg-gray-100 flex-shrink-0">
+                                        <div className="relative w-12 h-12 rounded-full overflow-hidden bg-gray-100 flex-shrink-0 border border-[#EBE6DF]">
                                             <Image src={product.imageUrl || "/placeholder-bread.jpg"} alt={product.name} fill className="object-cover" />
                                         </div>
                                         <span className="font-bold text-[#3B2B23]">{product.name}</span>

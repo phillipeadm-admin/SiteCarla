@@ -111,7 +111,7 @@ export default function ImageUpload({ onUpload, defaultValue }: ImageUploadProps
 
     return (
         <div className="space-y-4">
-            <div className="relative aspect-[4/3] max-w-[200px] mx-auto w-full rounded-[40px] md:rounded-[100px_30px_100px_30px] bg-[#FAF5EF] border-2 border-[#EBE6DF] flex flex-col items-center justify-center overflow-hidden group hover:border-[#3B2B23] transition-all shadow-sm">
+            <div className="relative aspect-square max-w-[200px] mx-auto w-full rounded-full bg-[#FAF5EF] border-2 border-[#EBE6DF] flex flex-col items-center justify-center overflow-hidden group hover:border-[#3B2B23] transition-all shadow-sm">
                 {preview ? (
                     <>
                         <img src={preview} alt="Preview" className="w-full h-full object-cover" />
