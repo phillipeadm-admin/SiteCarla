@@ -38,13 +38,13 @@ export default function ProductCard({ product }: { product: Product }) {
     const isOutOfStock = !product.batchId || (product.availableQuantity || 0) <= 0;
 
     return (
-        <div className="bg-[#FAF8F5] p-10 flex flex-col items-center group border border-[#EBE5DB] h-full">
+        <div className="bg-[#FAF8F5] p-10 flex flex-col items-center group border border-[#EBE5DB] h-full rounded-[40px] shadow-sm hover:shadow-md transition-shadow duration-500">
             <div className="relative w-full aspect-square mb-8 overflow-hidden">
                 <Image
                     src={product.imageUrl}
                     alt={product.name}
                     fill
-                    className="object-cover rounded-full transform group-hover:scale-105 transition-transform duration-700"
+                    className="object-cover rounded-[60px_20px_60px_20px] transform group-hover:scale-105 transition-transform duration-700"
                     sizes="(max-width: 768px) 300px, 400px"
                     quality={80}
                 />

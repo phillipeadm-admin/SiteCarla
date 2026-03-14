@@ -18,11 +18,11 @@ export default function GallerySection({ images }: { images: GalleryImage[] }) {
                 {images.map((image, index) => (
                     <div 
                         key={image.id} 
-                        className={`group relative overflow-hidden bg-white aspect-square w-[calc(100%-32px)] sm:w-[calc(50%-32px)] md:w-[calc(33.333%-40px)] lg:w-[calc(25%-40px)] rounded-full transition-all duration-700 hover:shadow-[0_40px_80px_rgba(59,43,35,0.15)] hover:-translate-y-4 hover:rotate-1 ${
+                        className={`group relative overflow-hidden bg-white aspect-square w-[calc(100%-32px)] sm:w-[calc(50%-32px)] md:w-[calc(33.333%-40px)] lg:w-[calc(25%-40px)] rounded-[100px_40px_100px_40px] transition-all duration-700 hover:shadow-[0_40px_80px_rgba(59,43,35,0.15)] hover:-translate-y-4 hover:rotate-1 ${
                             index % 2 !== 0 ? 'md:translate-y-12' : ''
                         }`}
                     >
-                        <div className="absolute inset-0 border border-[#EBE5DB] rounded-full z-10 pointer-events-none group-hover:border-[#3B2B23]/20 transition-colors"></div>
+                        <div className="absolute inset-0 border border-[#EBE5DB] rounded-[100px_40px_100px_40px] z-10 pointer-events-none group-hover:border-[#3B2B23]/20 transition-colors"></div>
                         <Image
                             src={image.imageUrl}
                             alt="Momento Romagnolle"
